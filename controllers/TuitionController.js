@@ -6,6 +6,7 @@ const Tutee = require("../models/Tutees");
 const Classes = require("../models/Classes");
 const User = require("../models/user");
 const Tutors = require("../models/Tutors");
+const Tutees = require("../models/Tutees");
 const router = express.Router();
 
 const SECRET = process.env.SECRET ?? "mysecret";
@@ -56,7 +57,7 @@ router.get("/tutor/seed", async (req, res) => {
       rates: 70,
       rating: 5,
       classType: "In-Person",
-      classLevel: ["Primary 5", "Primary 6"],
+      classLevel: ["Primary 5", "Primary 6", "Seconday 1"],
       region: "North",
       subjects: ["Mathematics", "English"],
       educationBackground: "youtube",
@@ -91,5 +92,60 @@ router.get("/tutor/seed", async (req, res) => {
     res.status(500).send({ error: "No tutors found!" });
   }
 });
+
+// Seed Tutees
+router.get("/tutee/seed", async (req, res) => {
+  const newTutees = [
+    {
+      username: "George3.14159",
+      fullName: "George Lim",
+      email: "iamastudent@gmail.com",
+      phone: 91919191,
+      preferredContactMode: "Phone",
+      currentLevel: ["Primary 3"],
+      subjects: ["Science"],
+      myTutors: ["Karen Tan Yan Yan"],
+      pendingTutors: ["John Cena"],
+      favTutors: ["Paul Lee"],
+    },
+    {
+      username: "sarah12",
+      fullName: "Sarah Scofield",
+      email: "sarah12@gmail.com",
+      phone: 91119222,
+      preferredContactMode: "Phone",
+      currentLevel: "Secondary 1",
+      region: "north",
+      subjects: ["Mathematics", "English"],
+      myTutors: ["Paul Lee"],
+      pendingTutors: ["John Cena"],
+      favTutors: ["John Cena"],
+    },
+    {
+      username: "James",
+      fullName: "James Bond",
+      email: "007@bond.com",
+      phone: 90000007,
+      preferredContactMode: "Email",
+      currentLevel: "Primary 5",
+      Region: "West",
+      subjects: ["English"],
+      myTutors: "John Cena",
+      pendingTutors: ["Paul Lee"],
+      favTutors: ["John Cena"],
+    },
+  ];
+
+  await Tutees.deleteMany();
+
+  try {
+    const seedTutees = await Tutees.create(newTutees);
+    res.send(seedTutees);
+  } catch (err) {
+    res.status(500).send({ error: "No tutees found!" });
+  }
+});
+
+//! Seed Classes
 
 module.exports = router;
