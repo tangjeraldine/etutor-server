@@ -1,32 +1,13 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
-const User = require("../models/User");
 
+const bcrypt = require("bcrypt");
 const Classes = require("../models/Classes");
 const Tutors = require("../models/Tutors");
 const Tutees = require("../models/Tutees");
 const router = express.Router();
 
 const SECRET = process.env.SECRET ?? "mysecret";
-
-// Seed for User //! --> use hashing function to hash passwords
-router.get("/users/seed", async (req, res) => {
-  const users = [
-    {
-      username: "Karen101",
-      password: "iwanttoseeyourmanager",
-      userType: "tutor",
-    },
-    { username: "John", password: "youcantseeme1234", userType: "tutor" },
-    { username: "paullee70", password: "ilovejohncena", userType: "tutor" },
-    { username: "sarah12", password: "maths4lyfe", userType: "tutee" },
-    { username: "George3.14159", password: "lifeofpi", userType: "tutee" },
-    { username: "James", password: "bangbang", userType: "tutee" },
-  ];
-  await User.deleteMany({});
-  const result = await User.insertMany(users);
-  res.json(result);
-});
 
 // Seed for tutor --> //! seed the tutors first so we can get ObjectID
 router.get("/tutor/seed", async (req, res) => {

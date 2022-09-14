@@ -3,9 +3,11 @@ const express = require("express");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
 const cors = require("cors");
-const bcrypt = require("bcrypt");
-const TuitionController = require("./controllers/TuitionController");
+const TuteeController = require("./controllers/TuteeController");
+const TutorController = require("./controllers/TutorController");
 const SeedController = require("./controllers/SeedController");
+const UserController = require("./controllers/UserController");
+const ClassController = require("./controllers/ClassController");
 
 const PORT = process.env.PORT ?? 3000;
 const MONGO_URI =
@@ -21,8 +23,11 @@ mongoose.connection.once("open", () => {
 app.use(morgan("dev"));
 app.use(cors());
 app.use(express.json());
-app.use("/", TuitionController);
-app.use("/", SeedController);
+app.use("/tutor", TutorController);
+app.use("/tutee", TuteeController);
+app.use("/seed", SeedController);
+app.use("/user", UserController);
+app.use("/class", ClassController);
 
 //*Index Route
 app.get("/", (req, res) => {

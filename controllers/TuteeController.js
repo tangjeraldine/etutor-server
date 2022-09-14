@@ -10,4 +10,8 @@ const router = express.Router();
 
 const SECRET = process.env.SECRET ?? "mysecret";
 
+router.get("/tuition", (req, res) => {
+  res.send({ msg: "This is the tutee controller" });
+});
+
 module.exports = router;
