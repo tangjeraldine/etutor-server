@@ -6,7 +6,7 @@ const router = express.Router();
 
 const SECRET = process.env.SECRET ?? "MaryJerDew";
 
-router.post("/login", async (req, res) => {
+router.post("/signin", async (req, res) => {
   const { username, password } = req.body;
   const user = await User.findOne({ username });
   if (user === null) {
@@ -20,6 +20,28 @@ router.post("/login", async (req, res) => {
     res.status(200).send({ msg: "Successful login", token });
   } else {
     res.status(401).send({ error: "Validation failed." });
+  }
+});
+
+router.post("/signup", async (req, res) => {
+  const newUser = req.body;
+  const newUsername = newUser.username;
+  try {
+    const thisUsername = await User.find({ newUsername });
+    console.log(thisUsername, newUsername);
+  } catch (error) {
+    console.log(error);
+  }
+  if (newUsername === "") {
+    res.status(400).send({ error: "Please provide a username." });
+  } else {
+    User.create(newUser, (error, user) => {
+      if (error) {
+        res.status(500).json({ error: "No user created." });
+      } else {
+        res.status(200).json(user);
+      }
+    });
   }
 });
 
