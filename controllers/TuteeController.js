@@ -26,7 +26,7 @@ const userTypeIsTutee = async (req, res, next) => {
 };
 
 // Get to tutees page where user can access all their own information
-router.get("/tutee", userTypeIsTutee, async (req, res) => {
+router.get("/", userTypeIsTutee, async (req, res) => {
   try {
     //! Change to find that one tutee's class info by id
     const payload = res.locals.payload;
@@ -38,8 +38,8 @@ router.get("/tutee", userTypeIsTutee, async (req, res) => {
   }
 });
 
-router.get("/tuition", (req, res) => {
-  res.send({ msg: "This is the tutee controller" });
-});
+// router.get("/tuition", (req, res) => {
+//   res.send({ msg: "This is the tutee controller" });
+// });
 
 module.exports = router;

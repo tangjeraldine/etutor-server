@@ -27,7 +27,7 @@ const userTypeIsTutor = async (req, res, next) => {
 };
 
 // Get to tutors page where user can access their own information
-router.get("/tutor", userTypeIsTutor, async (req, res) => {
+router.get("/", userTypeIsTutor, async (req, res) => {
   try {
     //! Change to find that one tutor's class info by username
     // const payload = req.headers.authorization;
@@ -40,8 +40,8 @@ router.get("/tutor", userTypeIsTutor, async (req, res) => {
   }
 });
 
-router.get("/tuition", (req, res) => {
-  res.send({ msg: "This is the tutors controller" });
-});
+// router.get("/tuition", (req, res) => {
+//   res.send({ msg: "This is the tutors controller" });
+// });
 
 module.exports = router;
