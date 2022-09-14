@@ -26,7 +26,7 @@ const userTypeIsTutee = async (req, res, next) => {
 };
 
 // Get to tutees page where user can access all their own information
-router.get("/tutee", userTypeIsTutee, async (req, res) => {
+router.get("/", userTypeIsTutee, async (req, res) => {
   try {
     //! Change to find that one tutee's class info by id
     const payload = res.locals.payload;
@@ -38,8 +38,27 @@ router.get("/tutee", userTypeIsTutee, async (req, res) => {
   }
 });
 
-router.get("/tuition", (req, res) => {
-  res.send({ msg: "This is the tutee controller" });
+router.post("/signup", async (req, res) => {
+  const newTutee = req.body;
+  const newUsername = newTutee.username;
+  try {
+    const thisUsername = await Tutees.find({ newUsername });
+    console.log(thisUsername, newUsername);
+  } catch (error) {
+    console.log(error);
+  }
+  if (newUsername === "") {
+    res.status(400).send({ error: "No username given." });
+  } else {
+    Tutees.create(newTutee, (error, tutee) => {
+      if (error) {
+        res.status(500).json({ error: "No input detected" });
+      } else {
+        res.status(200).json(tutee);
+      }
+    });
+  }
 });
+
 
 module.exports = router;

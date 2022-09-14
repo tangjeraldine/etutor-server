@@ -27,7 +27,7 @@ const userTypeIsTutor = async (req, res, next) => {
 };
 
 // Get to tutors page where user can access their own information
-router.get("/tutor", userTypeIsTutor, async (req, res) => {
+router.get("/", userTypeIsTutor, async (req, res) => {
   try {
     //! Change to find that one tutor's class info by username
     // const payload = req.headers.authorization;
@@ -40,8 +40,27 @@ router.get("/tutor", userTypeIsTutor, async (req, res) => {
   }
 });
 
-router.get("/tuition", (req, res) => {
-  res.send({ msg: "This is the tutors controller" });
+router.post("/signup", async (req, res) => {
+  const newTutor = req.body;
+  const newUsername = newTutor.username;
+  try {
+    const thisUsername = await Tutors.find({ newUsername });
+    console.log(thisUsername, newUsername);
+  } catch (error) {
+    console.log(error);
+  }
+  if (newUsername === "") {
+    res.status(400).send({ error: "No username given." });
+  } else {
+    Tutors.create(newTutor, (error, tutor) => {
+      if (error) {
+        res.status(500).json({ error: "No input detected" });
+      } else {
+        res.status(200).json(tutor);
+      }
+    });
+  }
 });
+
 
 module.exports = router;
