@@ -13,8 +13,8 @@ const TutorsSchema = new mongoose.Schema({
   subjects: { type: Array, required: true, default: [] },
   educationBackground: { type: String, required: true },
   teachingExperience: { type: String, required: true },
-  myTutees: { type: Array, default: [{}] },
-  pendingTutees: { type: Array, default: [{}] },
+  // myTutees: { type: Array, default: [{}] },
+  // pendingTutees: { type: Array, default: [{}] },
 });
 
 const Tutors = mongoose.model("Tutors", TutorsSchema);

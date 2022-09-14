@@ -3,10 +3,9 @@ const mongoose = require("mongoose");
 const ClassesSchema = new mongoose.Schema({
   classTitle: { type: String, required: true },
   subject: { type: String, required: true },
-  timeDay: { type: String, required: true },
-  tutor: { type: String, required: true },
-  booked: { type: Boolean, required: true, default: false },
-  bookedBy: { type: Array, required: true, default: [] },
+  timeDay: { type: Date, required: true },
+  tutor: { type: mongoose.Schema.Types.ObjectId, ref: "Tutors" },
+  bookedBy: { type: [mongoose.Schema.Types.ObjectId], ref: "Tutees" },
   groupSize: { type: Number, required: true, min: 1 },
 });
 

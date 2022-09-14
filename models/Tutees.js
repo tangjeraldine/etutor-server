@@ -9,9 +9,9 @@ const TuteesSchema = new mongoose.Schema({
   currentLevel: { type: String, required: true },
   region: { type: String, required: true }, //house to house tuition
   subjects: { type: Array, required: true, default: [] },
-  myTutors: { type: Array, default: [] },
-  pendingTutors: { type: Array, default: [] },
-  favTutors: { type: Array, default: [] },
+  myTutors: { type: [mongoose.Schema.Types.ObjectId], ref: "Tutors" },
+  pendingTutors: { type: [mongoose.Schema.Types.ObjectId], ref: "Tutors" },
+  favTutors: { type: [mongoose.Schema.Types.ObjectId], ref: "Tutors" },
 });
 
 const Tutees = mongoose.model("Tutees", TuteesSchema);

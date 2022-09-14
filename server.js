@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const morgan = require("morgan");
 const cors = require("cors");
 const TuitionController = require("./controllers/TuitionController");
+const SeedController = require("./controllers/SeedController");
 
 const PORT = process.env.PORT ?? 3000;
 const MONGO_URI =
@@ -20,6 +21,7 @@ app.use(morgan("dev"));
 app.use(cors());
 app.use(express.json());
 app.use("/", TuitionController);
+app.use("/", SeedController);
 
 //*Index Route
 app.get("/", (req, res) => {
@@ -28,5 +30,5 @@ app.get("/", (req, res) => {
 
 //* Listener
 app.listen(PORT, () => {
-  log(`Express listing on ${PORT}`);
+  console.log(`Express listing on ${PORT}`);
 });
