@@ -3,6 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
 const cors = require("cors");
+const bcrypt = require("bcrypt");
 const TuitionController = require("./controllers/TuitionController");
 const SeedController = require("./controllers/SeedController");
 
