@@ -7,7 +7,7 @@ const router = express.Router();
 const SECRET = process.env.SECRET ?? "MaryJerDew";
 
 router.post("/login", async (req, res) => {
-  const { username, password, userType } = req.body;
+  const { username, password } = req.body;
   const user = await User.findOne({ username });
   if (user === null) {
     res.status(401).send({ error: "No user" });
