@@ -23,6 +23,28 @@ router.post("/signin", async (req, res) => {
   }
 });
 
+router.post("/signup", async (req, res) => {
+  const newUser = req.body;
+  const newUsername = newUser.username;
+  try {
+    const thisUsername = await User.find({ newUsername });
+    console.log(thisUsername, newUsername);
+  } catch (error) {
+    console.log(error);
+  }
+  if (newUsername === "") {
+    res.status(400).send({ error: "Please provide a username." });
+  } else {
+    User.create(newUser, (error, user) => {
+      if (error) {
+        res.status(500).json({ error: "No user created." });
+      } else {
+        res.status(200).json(user);
+      }
+    });
+  }
+});
+
 // Seed for User //! --> use hashing function to hash passwords
 router.get("/seed", async (req, res) => {
   const users = [

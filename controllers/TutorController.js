@@ -40,8 +40,27 @@ router.get("/", userTypeIsTutor, async (req, res) => {
   }
 });
 
-// router.get("/tuition", (req, res) => {
-//   res.send({ msg: "This is the tutors controller" });
-// });
+router.post("/signup", async (req, res) => {
+  const newTutor = req.body;
+  const newUsername = newTutor.username;
+  try {
+    const thisUsername = await Tutors.find({ newUsername });
+    console.log(thisUsername, newUsername);
+  } catch (error) {
+    console.log(error);
+  }
+  if (newUsername === "") {
+    res.status(400).send({ error: "No username given." });
+  } else {
+    Tutors.create(newTutor, (error, tutor) => {
+      if (error) {
+        res.status(500).json({ error: "No input detected" });
+      } else {
+        res.status(200).json(tutor);
+      }
+    });
+  }
+});
+
 
 module.exports = router;
