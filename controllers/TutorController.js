@@ -40,27 +40,26 @@ router.get("/", userTypeIsTutor, async (req, res) => {
   }
 });
 
-router.post("/signup", async (req, res) => {
+router.post("/profile-signup", async (req, res) => {
   const newTutor = req.body;
-  const newUsername = newTutor.username;
+  const newSignUpEmail = newTutor.email;
   try {
-    const thisUsername = await Tutors.find({ newUsername });
-    console.log(thisUsername, newUsername);
+    const thisNewEmail = await Tutors.findOne({ email: newSignUpEmail });
+    console.log(thisNewEmail, newSignUpEmail);
+    if (thisNewEmail.email === newSignUpEmail) {
+      res.status(400).send({ error: "This email address is not available." });
+    } else {
+      Tutors.create(newTutor, (error, tutor) => {
+        if (error) {
+          res.status(500).json({ error: "No tutor account created." });
+        } else {
+          res.status(200).json(tutor);
+        }
+      });
+    }
   } catch (error) {
     console.log(error);
   }
-  if (newUsername === "") {
-    res.status(400).send({ error: "No username given." });
-  } else {
-    Tutors.create(newTutor, (error, tutor) => {
-      if (error) {
-        res.status(500).json({ error: "No input detected" });
-      } else {
-        res.status(200).json(tutor);
-      }
-    });
-  }
 });
-
 
 module.exports = router;
