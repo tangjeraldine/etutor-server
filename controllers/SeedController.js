@@ -85,9 +85,9 @@ router.get("/tutee/seed", async (req, res) => {
       currentLevel: "Primary 3",
       region: "East",
       subjects: ["Science"],
-      myTutors: ["63217806da256ce678c257a7"], //objectID
-      pendingTutors: ["63217806da256ce678c257a9"], //objectID
-      favTutors: ["63217806da256ce678c257a8"], //objectID
+      myTutors: ["6322cc176b926070ddfe3766"], //objectID
+      pendingTutors: ["6322cc176b926070ddfe3767"], //objectID
+      favTutors: ["6322cc176b926070ddfe3768"], //objectID
     },
     {
       username: "sarah12",
@@ -98,9 +98,9 @@ router.get("/tutee/seed", async (req, res) => {
       currentLevel: "Secondary 1",
       region: "North",
       subjects: ["Mathematics", "English"],
-      myTutors: ["63217806da256ce678c257a8"], //objectID
-      pendingTutors: ["63217806da256ce678c257a9"], //objectID
-      favTutors: ["63217806da256ce678c257a9"], //objectID
+      myTutors: ["6322cc176b926070ddfe3768"], //objectID
+      pendingTutors: ["6322cc176b926070ddfe3767"], //objectID
+      favTutors: ["6322cc176b926070ddfe3767"], //objectID
     },
     {
       username: "James",
@@ -111,9 +111,9 @@ router.get("/tutee/seed", async (req, res) => {
       currentLevel: "Primary 5",
       region: "West",
       subjects: ["English"],
-      myTutors: ["63217806da256ce678c257a9"], //objectID
-      pendingTutors: ["63217806da256ce678c257a8"], //objectID
-      favTutors: ["63217806da256ce678c257a9"], //objectID
+      myTutors: ["6322cc176b926070ddfe3767"], //objectID
+      pendingTutors: ["6322cc176b926070ddfe3768"], //objectID
+      favTutors: ["6322cc176b926070ddfe3768"], //objectID
     },
   ];
 
