@@ -35,12 +35,14 @@ router.post("/signin", validation(SignInValidation), async (req, res) => {
 
 router.post("/signup", validation(SignUpValidation), async (req, res) => {
   const newUser = req.body;
+  console.log(newUser);
   const newUsername = newUser.username;
+  console.log("newuserName", newUsername);
   try {
     const thisUsername = await User.findOne({ username: newUsername });
     console.log(thisUsername, newUsername);
     if (thisUsername.username === newUsername || newUsername === "") {
-      res.status(400).send({ error: "This username is not valid." });
+      res.status(400).send({ error: "This username has been taken." });
     } else {
       User.create(newUser, (error, user) => {
         if (error) {
