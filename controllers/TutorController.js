@@ -39,12 +39,32 @@ const userTypeIsTutor = async (req, res, next) => {
 };
 
 // Find all tutor
-router.get("/", userTypeIsTutor, async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const allTutor = await Tutors.find();
     res.status(200).send(allTutor);
   } catch (error) {
     res.status(500).send(error);
+  }
+});
+
+// Filter tutors by subjects,classType and classLevel
+// fix required
+router.get("/search", async (req, res) => {
+  let subjects = req.query.subjects;
+  let classType = req.query.classType;
+  let classLevel = req.query.classLevel;
+
+  try {
+    const filteredTutor = await Tutors.find({
+      subjects: subjects,
+      classType: classType,
+      classLevel: classLevel,
+    }).exec();
+
+    res.status(200).send(filteredTutor);
+  } catch (error) {
+    console.log(error);
   }
 });
 
