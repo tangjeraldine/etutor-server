@@ -64,7 +64,7 @@ router.get("/seed", async (req, res) => {
       userType: "tutor",
     },
     {
-      username: "John",
+      username: "JohnCeeCee",
       password: bcrypt.hashSync("Youc@ntseeme1234", 10),
       userType: "tutor",
     },
@@ -74,7 +74,7 @@ router.get("/seed", async (req, res) => {
       userType: "tutor",
     },
     {
-      username: "sarah12",
+      username: "sarahhh12",
       password: bcrypt.hashSync("mAtHs4lYfE!!", 10),
       userType: "tutee",
     },

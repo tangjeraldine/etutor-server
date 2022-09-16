@@ -13,7 +13,7 @@ const SECRET = process.env.SECRET ?? "mysecret";
 router.get("/tutor/seed", async (req, res) => {
   const newTutors = [
     {
-      username: "Karen101",
+      username: "6323e318061b07d4165dcbb0",
       fullName: "Karen Tan Yan Yan",
       email: "karentanyy@gmail.com",
       phone: 99911199,
@@ -30,7 +30,7 @@ router.get("/tutor/seed", async (req, res) => {
       //   pendingTutees: [],
     },
     {
-      username: "paullee70",
+      username: "6323e318061b07d4165dcbb2",
       fullName: "Paul Lee",
       email: "paullee@gmail.com",
       phone: 85459999,
@@ -46,7 +46,7 @@ router.get("/tutor/seed", async (req, res) => {
       //   pendingTutees: ["James Bond"],
     },
     {
-      username: "John",
+      username: "6323e318061b07d4165dcbb1",
       fullName: "John Cena",
       email: "johncena@gmail.com",
       phone: 123456789,
