@@ -29,11 +29,19 @@ const TutorProfileValidation = yup.object({
     .array()
     .of(yup.string())
     .required("At least one class level is required."), //pri 1-6, sec 1-5
-  region: yup.string().required("A region is required."), //north south east west central
+  //   .matches(/(Primary 1|Primary 2|Primary 3|Primary 4|Primary 5|Primary 6|Secondary 1|Secondary 2|Secondary 3|Secondary 4|Secondary 5)/, {
+  //     message: "Please select a valid class level.",
+  //     excludeEmptyString: true,
+  //   }),
+  // region: yup.string().required("A region is required."), //north south east west central
   subjects: yup
     .array()
     .of(yup.string())
     .required("At least one subject is required."),
+    // .matches(/(English|Mathematics|Science|Additional Mathematics|Elementary Mathematics|Biology|Physics|Chemistry)/, {
+    //   message: "Please select at least one subject.",
+    //   excludeEmptyString: true,
+    // }),
   educationBackground: yup
     .string()
     .required("Information on education background must be given."),
