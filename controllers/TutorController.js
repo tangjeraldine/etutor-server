@@ -38,6 +38,16 @@ const userTypeIsTutor = async (req, res, next) => {
   }
 };
 
+// Find all tutor
+router.get("/", userTypeIsTutor, async (req, res) => {
+  try {
+    const allTutor = await Tutors.find();
+    res.status(200).send(allTutor);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 // Get to tutors page where user can access their own information
 router.get("/", userTypeIsTutor, async (req, res) => {
   try {
