@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const validator = require("validator");
 
 const TutorsSchema = new mongoose.Schema({
   username: { type: mongoose.Schema.Types.ObjectId, ref: "Users" },
@@ -12,6 +13,16 @@ const TutorsSchema = new mongoose.Schema({
   phone: {
     type: Number,
     minlength: [8, "Needs to be at least 8 digits."],
+    validate(value) {
+      if (!validator.isMobilePhone(value, "en-SG")) {
+        console.log("Phone number is invalid");
+      }
+    },
+    required: true,
+  },
+  region: {
+    type: String,
+    enum: ["North", "South", "East", "West", "Central"],
     required: true,
   },
   rates: {
@@ -44,11 +55,6 @@ const TutorsSchema = new mongoose.Schema({
     required: true,
     default: [],
   },
-  region: {
-    type: String,
-    enum: ["North", "South", "East", "West", "Central"],
-    required: true,
-  }, //north south east west central
   subjects: {
     type: [String],
     enum: [

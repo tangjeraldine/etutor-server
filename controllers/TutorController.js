@@ -88,10 +88,10 @@ router.post(
   }
 );
 
-router.put("/editprofile/:id", async (req, res) => {
-  Users[req.params.id] = req.body;
-  console.log(Users[req.params.id]);
-  // const findThisTutor = await Tutors.findOne({username: })
-});
+// router.put("/editprofile/:id", async (req, res) => {
+//   Users[req.params.id] = req.body;
+//   console.log(Users[req.params.id]);
+// const findThisTutor = await Tutors.findOne({username: })
+// });
 
 module.exports = router;
