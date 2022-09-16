@@ -36,12 +36,10 @@ router.post("/signin", validation(SignInValidation), async (req, res) => {
 router.post("/signup", validation(SignUpValidation), async (req, res) => {
   const newUser = req.body;
   const newUsername = newUser.username;
+  newUser.password = bcrypt.hashSync(newUser.password, 10);
   try {
     const thisUsername = await User.findOne({ username: newUsername });
-    // console.log(thisUsername, newUsername);
-    if (thisUsername.username === newUsername) {
-      res.status(400).send({ error: "This username has been taken." });
-    } else {
+    if (thisUsername === null) {
       User.create(newUser, (error, user) => {
         if (error) {
           res.status(500).json({ error: "No user created." });
@@ -49,6 +47,8 @@ router.post("/signup", validation(SignUpValidation), async (req, res) => {
           res.status(200).json(user);
         }
       });
+    } else if (thisUsername.username === newUsername) {
+      res.status(400).send({ error: "This username has been taken." });
     }
   } catch (error) {
     console.log(error);
