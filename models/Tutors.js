@@ -14,6 +14,11 @@ const TutorsSchema = new mongoose.Schema({
     minlength: [8, "Needs to be at least 8 digits."],
     required: true,
   },
+  region: {
+    type: String,
+    enum: ["North", "South", "East", "West", "Central"],
+    required: true,
+  }, //north south east west central
   rates: {
     type: Number,
     required: true,
@@ -44,11 +49,6 @@ const TutorsSchema = new mongoose.Schema({
     required: true,
     default: [],
   },
-  region: {
-    type: String,
-    enum: ["North", "South", "East", "West", "Central"],
-    required: true,
-  }, //north south east west central
   subjects: {
     type: [String],
     enum: [
