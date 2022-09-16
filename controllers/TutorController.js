@@ -1,11 +1,11 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
 //test out middleware to see if we require bcrypt in the controller
-const User = require("../models/User");
 const Classes = require("../models/Classes");
 const Tutors = require("../models/Tutors");
 const Tutees = require("../models/Tutees");
 const TutorProfileValidation = require("../Validations/TutorProfileValidation");
+const Users = require("../models/User");
 const router = express.Router();
 
 const SECRET = process.env.SECRET ?? "mysecret";
@@ -77,5 +77,11 @@ router.post(
     }
   }
 );
+
+router.put("/editprofile/:id", async (req, res) => {
+  Users[req.params.id] = req.body;
+  console.log(Users[req.params.id]);
+  // const findThisTutor = await Tutors.findOne({username: })
+});
 
 module.exports = router;

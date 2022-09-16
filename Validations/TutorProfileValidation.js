@@ -11,8 +11,8 @@ const TutorProfileValidation = yup.object({
     .required("A username is required."),
   email: yup.string().email().required("An email address is required."),
   phone: yup
-    .number()
-    .matches(/^{8}$/, {
+    .string()
+    .matches(/^[0-9]{8}$/, {
       message: "Phone number should be at least 8 digits long.",
       excludeEmptyString: true,
     })
