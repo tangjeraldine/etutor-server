@@ -27,7 +27,7 @@ const TutorsSchema = new mongoose.Schema({
     required: true,
   },
   classLevel: {
-    type: Array,
+    type: [String],
     enum: [
       "Primary 1",
       "Primary 2",
@@ -50,7 +50,7 @@ const TutorsSchema = new mongoose.Schema({
     required: true,
   }, //north south east west central
   subjects: {
-    type: Array,
+    type: [String],
     enum: [
       "English",
       "Mathematics",
