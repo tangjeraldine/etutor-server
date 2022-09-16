@@ -1,9 +1,22 @@
 const yup = require("yup");
 
 const TutorProfileValidation = yup.object({
-  fullName: yup.string().required("A username is required."),
+  fullName: yup
+    .string()
+    .min()
+    .matches(/^[a-zA-Z\s]*$/, {
+      message: "Name should have at least 4 characters.",
+      excludeEmptyString: true,
+    })
+    .required("A username is required."),
   email: yup.string().email().required("An email address is required."),
-  phone: yup.number().required("A username is required."),
+  phone: yup
+    .number()
+    .matches(/^{8}$/, {
+      message: "Phone number should be at least 8 digits long.",
+      excludeEmptyString: true,
+    })
+    .required("A username is required."),
   rates: yup
     .number()
     .required("A rate per lesson is required.")

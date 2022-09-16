@@ -27,7 +27,7 @@ const userTypeIsTutor = async (req, res, next) => {
   const token = bearer.split(" ")[1];
   try {
     res.locals.payload = jwt.verify(token, SECRET);
-    if (res.locals.payload.userTYPE === "tutor") {
+    if (res.locals.payload.userTYPE === "Tutor") {
       // res.send(res.locals.payload);
       next();
     } else {
