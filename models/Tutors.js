@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const TutorsSchema = new mongoose.Schema({
-  username: { type: String, required: true },
+  username: { type: mongoose.Schema.Types.ObjectId, ref: "Users" },
   fullName: { type: String, required: true },
   email: { type: String, required: true },
   phone: { type: Number, required: true },
