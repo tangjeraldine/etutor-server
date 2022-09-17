@@ -12,7 +12,7 @@ const TuteeProfileValidation = yup.object({
   email: yup.string().email().required("An email address is required."),
   phone: yup
     .string()
-    .matches(/^(+).[0-9]{8,20}$/, {
+    .matches(/^[+0-9]{8,20}$/, {
       message:
         "Phone number should be between 8-20 digits long and contain your country code (e.g. +65 ).",
       excludeEmptyString: true,

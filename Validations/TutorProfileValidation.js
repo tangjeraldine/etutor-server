@@ -9,7 +9,10 @@ const TutorProfileValidation = yup.object({
       excludeEmptyString: true,
     })
     .required("A username is required."),
-  email: yup.string().email('Must be a valid email').required("An email address is required."),
+  email: yup
+    .string()
+    .email("Must be a valid email")
+    .required("An email address is required."),
   phone: yup
     .string()
     .matches(/^[0-9]{8,20}$/, {
@@ -17,7 +20,7 @@ const TutorProfileValidation = yup.object({
       excludeEmptyString: true,
     })
     .required("A phone number is required."),
-    region: yup
+  region: yup
     .string()
     .matches(/(North|South|East|West|Central)/, {
       message: "A region is required.",
@@ -26,7 +29,7 @@ const TutorProfileValidation = yup.object({
     .required("A region is required."),
   rates: yup
     .number()
-    .typeError('Rates must be a number')
+    .typeError("Rates must be a number")
     .required("A rate per lesson is required.")
     .min(0, { message: "Rate cannot be less than 0." })
     .max(1000, { message: "Rates cannot be higher than 1000." }),

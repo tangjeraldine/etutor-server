@@ -4,9 +4,21 @@ const User = require("../models/User");
 const Classes = require("../models/Classes");
 const Tutors = require("../models/Tutors");
 const Tutees = require("../models/Tutees");
+const TuteeProfileValidation = require("../Validations/TuteeProfileValidation");
 const router = express.Router();
 
 const SECRET = process.env.SECRET ?? "mysecret";
+
+//* Middleware for validation
+const validation = (schema) => async (req, res, next) => {
+  const body = req.body;
+  try {
+    await schema.validate(body);
+    next();
+  } catch (error) {
+    res.status(400).json(error);
+  }
+};
 
 //userTypeIsTutee middleware
 const userTypeIsTutee = async (req, res, next) => {
@@ -38,7 +50,7 @@ router.get("/", userTypeIsTutee, async (req, res) => {
   }
 });
 
-router.post("/signup", async (req, res) => {
+router.post("/signup", validation(TuteeProfileValidation), async (req, res) => {
   const newTutee = req.body;
   const newUsername = newTutee.username;
   try {
@@ -59,6 +71,5 @@ router.post("/signup", async (req, res) => {
     });
   }
 });
-
 
 module.exports = router;
