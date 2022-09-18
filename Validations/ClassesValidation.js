@@ -21,7 +21,7 @@ const ClassesValidation = yup.object({
     ),
   timeDay: yup
     .date()
-    .default(() => new Date())
+    .default(() => new Date()) //! How to make the date not before today
     .required("A date and time is required."),
   groupSize: yup.number().positive().integer(),
 });
