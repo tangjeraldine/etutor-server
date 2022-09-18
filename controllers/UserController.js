@@ -56,20 +56,35 @@ router.post("/signup", validation(SignUpValidation), async (req, res) => {
   }
 });
 
+router.get("/viewuser/:id", async (req, res) => {
+  const { id } = req.params;
+  const ViewThisUser = await User.findOne({ _id: id });
+  res.send(ViewThisUser);
+});
+
 router.put(
   "/edituserdetails/:id",
   validation(SignUpValidation),
   async (req, res) => {
     const { id } = req.params;
     const editedUserDetails = req.body;
-    // console.log("editedProfile1", editedProfile);
-    // const showThisTutor = await Tutors.findOne({ username: id });
+    console.log("editedUserDetails1", editedUserDetails);
     try {
-      const updatedUser = await Tutees.findOneAndUpdate(id, editedUserDetails, {
-        new: true,
-      });
-      // console.log("editedProfile2", editedProfile);
-      // console.log("updatedTutee", updatedTutee);
+      const updatedUser = await User.findOneAndUpdate(
+        id,
+        {
+          username: editedUserDetails.username,
+          password: bcrypt.hashSync(editedUserDetails.password, 10),
+          userType: editedUserDetails.userType,
+          email: editedUserDetails.email,
+          //! what if current user changes their email to another email that is already in use? Where to apply the conditional to eliminate this from happening
+        },
+        {
+          new: true,
+        }
+      );
+      console.log("editedUserDetails2", editedUserDetails);
+      console.log("updatedUser", updatedUser);
       res.status(200).json(updatedUser);
     } catch (error) {
       console.log(error);
