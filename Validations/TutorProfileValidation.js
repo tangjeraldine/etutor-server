@@ -4,12 +4,14 @@ const TutorProfileValidation = yup.object({
   fullName: yup
     .string()
     .matches(/^[a-zA-Z\s]{4,30}$/, {
-      message:
-        "Name should have at least 4 characters, and contain only alphabets.",
+      message: "Name should have 4-30 characters, and contain only alphabets.",
       excludeEmptyString: true,
     })
     .required("A username is required."),
-  email: yup.string().email('Must be a valid email').required("An email address is required."),
+  email: yup
+    .string()
+    .email("Must be a valid email")
+    .required("An email address is required."),
   phone: yup
     .string()
     .matches(/^[0-9]{8,20}$/, {
@@ -17,7 +19,7 @@ const TutorProfileValidation = yup.object({
       excludeEmptyString: true,
     })
     .required("A phone number is required."),
-    region: yup
+  region: yup
     .string()
     .matches(/(North|South|East|West|Central)/, {
       message: "A region is required.",
@@ -26,14 +28,14 @@ const TutorProfileValidation = yup.object({
     .required("A region is required."),
   rates: yup
     .number()
-    .typeError('Rates must be a number')
+    .typeError("Rates must be a number")
     .required("A rate per lesson is required.")
-    .min(0, { message: "Rate cannot be less than 0." })
-    .max(1000, { message: "Rates cannot be higher than 1000." }),
+    .min(0, "Rate cannot be less than 0.")
+    .max(1000, "Rates cannot be higher than 1000."),
   rating: yup
     .number()
-    .min(1, { message: "Rating cannot be lower than 1." })
-    .max(5, { message: "Rating cannot be higher than 5." }),
+    .min(1, "Rating cannot be lower than 1.")
+    .max(5, "Rating cannot be higher than 5."),
   classType: yup
     .string()
     .matches(/(In-Person|Remote|Both In-Person and Remote)/, {
@@ -63,12 +65,12 @@ const TutorProfileValidation = yup.object({
     .string()
     .min(50, "A minimum length of 50 char is required.")
     .max(450, "A maximum length of 450 char is allowed.")
-    .required("Information on education background must be given."),
+    .required("Information on education background must be provided."),
   teachingExperience: yup
     .string()
     .min(50, "A minimum length of 50 char is required.")
     .max(450, "A maximum length of 450 char is allowed.")
-    .required("Information on teaching experience must be given."),
+    .required("Information on teaching experience must be provided."),
 });
 
 module.exports = TutorProfileValidation;

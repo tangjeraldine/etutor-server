@@ -99,22 +99,22 @@ router.post(
   async (req, res) => {
     const newTutor = req.body;
     const newSignUpEmail = newTutor.email;
-    try {
-      const thisNewEmail = await Tutors.findOne({ email: newSignUpEmail });
-      console.log(thisNewEmail, newSignUpEmail);
-      if (thisNewEmail === null) {
-        Tutors.create(newTutor, (error, tutor) => {
-          if (error) {
-            res.status(500).json({ error: "No tutor account created." });
-          } else {
-            res.status(200).json(tutor);
-          }
-        });
-      } else if (thisNewEmail.email === newSignUpEmail) {
-        res.status(400).send({ error: "This email address is not available." });
-      }
-    } catch (error) {
-      console.log(error);
+    const thisNewEmail = await Tutors.findOne({ email: newSignUpEmail });
+    //!Q: this means only email is unique right? then phone number we just leave it as not unique? as of now i just set the front end to detect only email as unique
+    //another Q: this means the email is unique only within tutors? bc if tutee creates with same email we wont know cz we r looking thru db of tutor only
+    //possible solution: email is part of generic user sign up
+    console.log(thisNewEmail, newSignUpEmail);
+    if (thisNewEmail === null) {
+      Tutors.create(newTutor, (error, tutor) => {
+        if (error) {
+          console.log(error);
+          res.status(500).json({ error: "Tutor profile unable to be set up." });
+        } else {
+          res.status(200).json(tutor);
+        }
+      });
+    } else if (thisNewEmail.email === newSignUpEmail) {
+      res.status(400).send({ error: "This email address is already in use." });
     }
   }
 );
