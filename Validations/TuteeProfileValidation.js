@@ -3,16 +3,11 @@ const yup = require("yup");
 const TuteeProfileValidation = yup.object({
   fullName: yup
     .string()
-    .min()
     .matches(/^[a-zA-Z\s]{4,30}$/, {
       message: "Name should have 4-30 characters, and contain only alphabets.",
       excludeEmptyString: true,
     })
     .required("A username is required."),
-  email: yup
-    .string()
-    .email("Must be a valid email")
-    .required("An email address is required."),
   phone: yup
     .string()
     .matches(/^[0-9]{8,20}$/, {

@@ -9,12 +9,7 @@ const TuteesSchema = new mongoose.Schema({
     maxlength: [30, "Max length of name is 30 characters."],
     required: [true, "Full name is required."],
   },
-  email: {
-    type: String,
-    minlength: [6, "Needs to contain at least 4 characters."],
-    maxlength: [30, "Exceeded the max length of 30 characters."],
-    required: [true, "An email address is required."],
-  },
+
   phone: {
     type: String,
     minlength: [8, "Needs to be at least 8 digits."],

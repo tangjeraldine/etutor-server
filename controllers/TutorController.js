@@ -100,9 +100,6 @@ router.post(
     const newTutor = req.body;
     const newSignUpEmail = newTutor.email;
     const thisNewEmail = await Tutors.findOne({ email: newSignUpEmail });
-    //!Q: this means only email is unique right? then phone number we just leave it as not unique? as of now i just set the front end to detect only email as unique
-    //another Q: this means the email is unique only within tutors? bc if tutee creates with same email we wont know cz we r looking thru db of tutor only
-    //possible solution: email is part of generic user sign up
     console.log(thisNewEmail, newSignUpEmail);
     if (thisNewEmail === null) {
       Tutors.create(newTutor, (error, tutor) => {
@@ -119,10 +116,28 @@ router.post(
   }
 );
 
-// router.put("/editprofile/:id", async (req, res) => {
-//   Users[req.params.id] = req.body;
-//   console.log(Users[req.params.id]);
-// const findThisTutor = await Tutors.findOne({username: })
-// });
+router.put(
+  "/editprofile/:id",
+  validation(TutorProfileValidation),
+  async (req, res) => {
+    const { id } = req.params;
+    const editedProfile = req.body;
+    console.log("editedProfile1", editedProfile);
+    // const showThisTutor = await Tutors.findOne({ username: id });
+    try {
+      const updatedTutor = await Tutors.findOneAndUpdate(
+        id, //finding the tutor that you want to edit
+        editedProfile,
+        { new: true }
+      );
+      console.log("editedProfile2", editedProfile);
+      console.log("updatedTutor", updatedTutor);
+      res.status(200).json(updatedTutor);
+    } catch (error) {
+      console.log(error);
+      res.status(401).send({ error: "Tutor details could not be updated." });
+    }
+  }
+);
 
 module.exports = router;
