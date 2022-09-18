@@ -38,11 +38,20 @@ const userTypeIsTutor = async (req, res, next) => {
   }
 };
 
-// Find all tutor
+// Find all tutor w pagination
 router.get("/", async (req, res) => {
   try {
-    const allTutor = await Tutors.find();
-    res.status(200).send(allTutor);
+    const { page = 0 } = req.query;
+    console.log(req.query);
+    const PAGE_SIZE = 5;
+    const total = await Tutors.countDocuments({});
+    const allTutor = await Tutors.find({}, null, {
+      skip: parseInt(page) * PAGE_SIZE,
+      limit: PAGE_SIZE,
+    });
+    res
+      .status(200)
+      .send({ totalPages: Math.ceil(total / PAGE_SIZE), allTutor });
   } catch (error) {
     res.status(500).send(error);
   }
@@ -54,11 +63,13 @@ router.get("/search", async (req, res) => {
   let subjects = req.query.subjects;
   let classType = req.query.classType;
   let classLevel = req.query.classLevel;
-
+  console.log("subjects", subjects);
+  console.log("classType", classType);
+  console.log("classLevel", classLevel);
   try {
     const filteredTutor = await Tutors.find({
-      subjects: subjects,
-      classType: classType,
+      subjects: [subjects],
+      classType: [classType],
       classLevel: classLevel,
     }).exec();
 
