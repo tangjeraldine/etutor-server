@@ -11,36 +11,33 @@ const TutorsSchema = new mongoose.Schema({
   },
   email: { type: String, required: true },
   phone: {
-    type: Number,
+    type: String,
     minlength: [8, "Needs to be at least 8 digits."],
+    maxlength: [20, "Exceeded the max length of 20 digits."],
     validate(value) {
       if (!validator.isMobilePhone(value, "en-SG")) {
         console.log("Phone number is invalid");
       }
     },
-    required: true,
+    required: [true, "A phone number is required."],
   },
   region: {
     type: String,
     enum: ["North", "South", "East", "West", "Central"],
-    required: true,
+    required: [true, "A region is required."],
   },
-  region: {
-    type: String,
-    enum: ["North", "South", "East", "West", "Central"],
-    required: true,
-  }, //north south east west central
   rates: {
     type: Number,
-    required: true,
+    required: [true, "Rates are required."],
     min: [0, "Rates cannot be less than zero."],
+    max: [1000, "Rates cannot be higher than 1000."],
     minlength: [1, "Needs to be at least 1 digit."],
   },
   rating: { type: Number, min: 1, max: 5 },
   classType: {
     type: String,
     enum: ["In-Person", "Remote", "Both In-Person and Remote"],
-    required: true,
+    required: [true, "Class type is required."],
   },
   classLevel: {
     type: [String],
@@ -57,7 +54,7 @@ const TutorsSchema = new mongoose.Schema({
       "Secondary 4",
       "Secondary 5",
     ],
-    required: true,
+    required: [true, "Class level is required."],
     default: [],
   },
   subjects: {
@@ -72,11 +69,11 @@ const TutorsSchema = new mongoose.Schema({
       "Physics",
       "Chemistry",
     ],
-    required: true,
+    required: [true, "Subject is required."],
     default: [],
   },
-  educationBackground: { type: String, required: true },
-  teachingExperience: { type: String, required: true },
+  educationBackground: { type: String, required: [true, "Education background is required."] },
+  teachingExperience: { type: String, required: [true, "Teaching experience is required."] },
   // myTutees: { type: Array, default: [{}] },
   // pendingTutees: { type: Array, default: [{}] },
 });

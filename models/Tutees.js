@@ -13,27 +13,28 @@ const TuteesSchema = new mongoose.Schema({
     type: String,
     minlength: [6, "Needs to contain at least 4 characters."],
     maxlength: [30, "Exceeded the max length of 30 characters."],
-    required: true,
+    required: [true, "An email address is required."],
   },
   phone: {
-    type: Number,
+    type: String,
     minlength: [8, "Needs to be at least 8 digits."],
+    maxlength: [20, "Exceeded the max length of 20 digits."],
     validate(value) {
       if (!validator.isMobilePhone(value, "en-SG")) {
         console.log("Phone number is invalid");
       }
     },
-    required: true,
+    required: [true, "A phone number is required."],
   },
   region: {
     type: String,
     enum: ["North", "South", "East", "West", "Central"],
-    required: true,
+    required: [true, "A region is required."],
   },
   preferredContactMode: {
     type: String,
     enum: ["Phone Call", "Email", "WhatsApp Message"],
-    required: true,
+    required: [true, "Preferred mode of contact is required."],
   },
   currentLevel: {
     type: String,
@@ -50,10 +51,10 @@ const TuteesSchema = new mongoose.Schema({
       "Secondary 4",
       "Secondary 5",
     ],
-    required: true,
+    required: [true, "Class level is required."],
   },
   subjects: {
-    type: String,
+    type: [String],
     enum: [
       "English",
       "Mathematics",
@@ -64,7 +65,7 @@ const TuteesSchema = new mongoose.Schema({
       "Physics",
       "Chemistry",
     ],
-    required: true,
+    required: [true, "At least one subject is required."],
   },
   myTutors: { type: [mongoose.Schema.Types.ObjectId], ref: "Tutors" },
   pendingTutors: { type: [mongoose.Schema.Types.ObjectId], ref: "Tutors" },
