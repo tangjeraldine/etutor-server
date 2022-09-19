@@ -98,21 +98,14 @@ router.post(
   validation(TutorProfileValidation),
   async (req, res) => {
     const newTutor = req.body;
-    const newSignUpEmail = newTutor.email;
-    const thisNewEmail = await Tutors.findOne({ email: newSignUpEmail });
-    console.log(thisNewEmail, newSignUpEmail);
-    if (thisNewEmail === null) {
-      Tutors.create(newTutor, (error, tutor) => {
-        if (error) {
-          console.log(error);
-          res.status(500).json({ error: "Tutor profile unable to be set up." });
-        } else {
-          res.status(200).json(tutor);
-        }
-      });
-    } else if (thisNewEmail.email === newSignUpEmail) {
-      res.status(400).send({ error: "This email address is already in use." });
-    }
+    await Tutors.create(newTutor, (error, tutor) => {
+      if (error) {
+        console.log(error);
+        res.status(500).json({ error: "Tutor profile unable to be set up." });
+      } else {
+        res.status(200).json(tutor);
+      }
+    });
   }
 );
 

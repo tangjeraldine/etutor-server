@@ -26,7 +26,7 @@ router.post("/signin", validation(SignInValidation), async (req, res) => {
     res.status(401).send({ error: "No user" });
   } else if (bcrypt.compareSync(password, user.password)) {
     const payload = { user };
-    const token = jwt.sign(payload, SECRET, { expiresIn: "5m" });
+    const token = jwt.sign(payload, SECRET, { expiresIn: "30m" });
     res.status(200).send({ msg: "Successful login", token });
   } else {
     res.status(401).send({ error: "Validation failed." });
@@ -37,22 +37,24 @@ router.post("/signup", validation(SignUpValidation), async (req, res) => {
   const newUser = req.body;
   const newUsername = newUser.username;
   newUser.password = bcrypt.hashSync(newUser.password, 10);
-  try {
-    const thisUsername = await User.findOne({ username: newUsername });
-    if (thisUsername === null) {
-      User.create(newUser, (error, user) => {
-        console.log(error);
-        if (error) {
-          res.status(500).json({ error: "User unable to be created." });
-        } else {
-          res.status(200).json(user);
-        }
-      });
-    } else if (thisUsername.username === newUsername) {
+  const thisUsername = await User.findOne({ username: newUsername });
+  const thisNewEmail = await User.findOne({ email: newUser.email });
+  if (thisUsername === null && thisNewEmail === null) {
+    User.create(newUser, (error, user) => {
+      console.log(error);
+      if (error) {
+        res.status(500).json({ error: "User unable to be created." });
+      } else {
+        res.status(200).json(user);
+      }
+    });
+  } else {
+    if (thisUsername.username === newUsername) {
       res.status(400).send({ error: "This username has been taken." });
     }
-  } catch (error) {
-    console.log(error);
+    if (thisNewEmail.email === newUser.email) {
+      res.status(400).send({ error: "This email address is already in use." });
+    }
   }
 });
 

@@ -50,27 +50,21 @@ router.get("/", userTypeIsTutee, async (req, res) => {
   }
 });
 
-router.post("/signup", validation(TuteeProfileValidation), async (req, res) => {
-  const newTutee = req.body;
-  const newUsername = newTutee.username;
-  try {
-    const thisUsername = await Tutees.find({ newUsername });
-    console.log(thisUsername, newUsername);
-  } catch (error) {
-    console.log(error);
-  }
-  if (newUsername === "") {
-    res.status(400).send({ error: "No username given." });
-  } else {
-    Tutees.create(newTutee, (error, tutee) => {
+router.post(
+  "/profile-signup",
+  validation(TuteeProfileValidation),
+  async (req, res) => {
+    const newTutee = req.body;
+    await Tutees.create(newTutee, (error, tutee) => {
       if (error) {
-        res.status(500).json({ error: "No input detected" });
+        console.log(error);
+        res.status(500).json({ error: "Tutee profile unable to be set up." });
       } else {
         res.status(200).json(tutee);
       }
     });
   }
-});
+);
 
 router.put(
   "/editprofile/:id",
