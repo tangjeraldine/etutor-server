@@ -41,7 +41,7 @@ router.post("/signup", validation(SignUpValidation), async (req, res) => {
     const thisUsername = await User.findOne({ username: newUsername });
     if (thisUsername === null) {
       User.create(newUser, (error, user) => {
-        console.log(error)
+        console.log(error);
         if (error) {
           res.status(500).json({ error: "No user created." });
         } else {
