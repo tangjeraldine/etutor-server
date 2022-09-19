@@ -22,8 +22,9 @@ const validation = (schema) => async (req, res, next) => {
 router.post("/signin", validation(SignInValidation), async (req, res) => {
   const { username, password } = req.body;
   const user = await User.findOne({ username });
+  console.l;
   if (user === null) {
-    res.status(401).send({ error: "No user" });
+    res.status(401).send({ error: "No user." });
   } else if (bcrypt.compareSync(password, user.password)) {
     const payload = { user };
     const token = jwt.sign(payload, SECRET, { expiresIn: "30m" });
