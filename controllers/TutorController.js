@@ -77,7 +77,6 @@ router.get("/", async (req, res) => {
 });
 
 // Filter tutors by subjects,classType and classLevel
-// fix required
 router.get("/search", async (req, res) => {
   let subjects = req.query.subjects.split(",");
   let classType = req.query.classType;
