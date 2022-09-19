@@ -34,9 +34,10 @@ const TutorsSchema = new mongoose.Schema({
   },
   rating: { type: Number, min: 1, max: 5 },
   classType: {
-    type: String,
-    enum: ["In-Person", "Remote", "Both In-Person and Remote"],
+    type: [String],
+    enum: ["In-Person", "Remote"],
     required: [true, "Class type is required."],
+    default: [],
   },
   classLevel: {
     type: [String],
@@ -79,8 +80,6 @@ const TutorsSchema = new mongoose.Schema({
     type: String,
     required: [true, "Teaching experience is required."],
   },
-  // myTutees: { type: Array, default: [{}] },
-  // pendingTutees: { type: Array, default: [{}] },
 });
 
 const Tutors = mongoose.model("Tutors", TutorsSchema);

@@ -9,6 +9,23 @@ const ClassesValidation = yup.object({
       excludeEmptyString: true,
     })
     .required("Class title is required."),
+  classType: yup
+    .string()
+    .matches(/(In-Person|Remote)/, {
+      message: "An appropriate class type is required.",
+      excludeEmptyString: true,
+    })
+    .required("Please indicate the mode that the classes are held in."),
+  classLevel: yup
+    .string()
+    .matches(
+      /(Primary 1|Primary 2|Primary 3|Primary 4|Primary 5|Primary 6|Secondary 1|Secondary 2|Secondary 3|Secondary 4|Secondary 5)/,
+      {
+        message: "Please select a valid class level.",
+        excludeEmptyString: true,
+      }
+    )
+    .required("At least one class level is required."),
   subjects: yup
     .string()
     .required("Exactly one subject is required.")
@@ -23,7 +40,14 @@ const ClassesValidation = yup.object({
     .date()
     .default(() => new Date()) //! How to make the date not before today
     .required("Date and time is required."),
-  groupSize: yup.number().positive().integer().required('Group size is required.').min(1, 'Group size must be at least 1.'),
+  tutor: yup.string().required("A tutor is required."),
+  bookedBy: yup.array().of(yup.string()),
+  groupSize: yup
+    .number()
+    .positive()
+    .integer()
+    .required("Group size is required.")
+    .min(1, "Group size must be at least 1."),
 });
 
 module.exports = ClassesValidation;
