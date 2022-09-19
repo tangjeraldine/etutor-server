@@ -12,9 +12,16 @@ const moment = require("moment");
 const bodyParser = require("body-parser");
 const SECRET = process.env.SECRET ?? "mysecret";
 
-router.get("/", (req, res) => {
-  res.send({ msg: "This is the class controller" });
-});
+//* Middleware for validation
+const validation = (schema) => async (req, res, next) => {
+  const body = req.body;
+  try {
+    await schema.validate(body);
+    next();
+  } catch (error) {
+    res.status(400).json(error);
+  }
+};
 
 router.use(bodyParser.json());
 
@@ -37,16 +44,15 @@ router.use(bodyParser.json());
 //   res.send(classes);
 // });
 
-
-
-router.get("/get-classes", async (req, res) => {//need to insert middleware for classesvalidation
+router.get("/get-classes", async (req, res) => {
+  //need to insert middleware for classesvalidation
   try {
-    const userId = req.body._id//rn in the database the mongoid for tutors doesnt match the one in classes
-    console.log(userId)
-    const classes = await Classes.find({tutor: userId});
+    const userId = req.body._id; //rn in the database the mongoid for tutors doesnt match the one in classes
+    console.log(userId);
+    const classes = await Classes.find({ tutor: userId });
     res.status(200).send(classes);
   } catch (error) {
-    res.status(500).send({ error: 'Unable to load classes.' });
+    res.status(500).send({ error: "Unable to load classes." });
   }
 });
 
