@@ -9,10 +9,10 @@ const TuteeProfileValidation = yup.object({
       excludeEmptyString: true,
     })
     .required("A username is required."),
-  email: yup
-    .string()
-    .email("Must be a valid email")
-    .required("An email address is required."),
+  // email: yup
+  //   .string()
+  //   .email("Must be a valid email")
+  //   .required("An email address is required."),
   phone: yup
     .string()
     .matches(/^[0-9]{8,20}$/, {

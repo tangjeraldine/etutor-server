@@ -43,7 +43,7 @@ router.post("/signup", validation(SignUpValidation), async (req, res) => {
       User.create(newUser, (error, user) => {
         console.log(error)
         if (error) {
-          res.status(500).json({ error: "No user created." });
+          res.status(500).json({ error: "User unable to be created." });
         } else {
           res.status(200).json(user);
         }
