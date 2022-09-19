@@ -40,7 +40,7 @@ const userTypeIsTutor = async (req, res, next) => {
 
 router.get("/region", async (req, res) => {
   try {
-    const sortbyRegion = await Tutors.find({}).sort({ region: -1 });
+    const sortbyRegion = await Tutors.find({}).sort({ region: 1, rating: 1 });
     console.log(sortbyRegion);
     res.status(200).send(sortbyRegion);
   } catch (error) {
@@ -67,6 +67,9 @@ router.get("/", async (req, res) => {
     const allTutor = await Tutors.find({}, null, {
       skip: parseInt(page) * PAGE_SIZE,
       limit: PAGE_SIZE,
+      sort: {
+        rating: -1,
+      },
     });
     res
       .status(200)
@@ -81,15 +84,22 @@ router.get("/search", async (req, res) => {
   let subjects = req.query.subjects.split(",");
   let classType = req.query.classType;
   let classLevel = req.query.classLevel;
+  let region = req.query.region.split(",");
   console.log("subjects", subjects);
   console.log("classType", classType);
   console.log("classLevel", classLevel);
+  console.log("region", region);
   try {
-    const filteredTutor = await Tutors.find({
-      subjects: { $all: subjects },
-      classType: classType,
-      classLevel: classLevel,
-    }).exec();
+    const filteredTutor = await Tutors.find(
+      {
+        subjects: { $all: subjects },
+        classType: { $all: classType },
+        classLevel: classLevel,
+        region: { $all: region },
+      },
+      null,
+      { sort: { rating: -1 } }
+    ).exec();
 
     res.status(200).send(filteredTutor);
   } catch (error) {
