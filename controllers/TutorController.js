@@ -137,6 +137,20 @@ router.post(
   }
 );
 
+router.get("/editprofile/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const getThisTutor = await Tutors.findOne({ username: id });
+    if (getThisTutor === null) {
+      res.status(404).send({ error: "Tutor not found." });
+    } else {
+      res.status(200).send(getThisTutor);
+    }
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
+
 router.put(
   "/editprofile/:id",
   validation(TutorProfileValidation),
