@@ -86,7 +86,7 @@ router.get("/search", async (req, res) => {
   console.log("classLevel", classLevel);
   try {
     const filteredTutor = await Tutors.find({
-      subjects: subjects,
+      subjects: { $all: subjects },
       classType: classType,
       classLevel: classLevel,
     }).exec();
