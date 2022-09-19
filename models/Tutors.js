@@ -9,7 +9,6 @@ const TutorsSchema = new mongoose.Schema({
     maxlength: [30, "Max length of name is 30 characters."],
     required: [true, "Full name is required."],
   },
-  email: { type: String, required: true },
   phone: {
     type: String,
     minlength: [8, "Needs to be at least 8 digits."],
@@ -72,8 +71,14 @@ const TutorsSchema = new mongoose.Schema({
     required: [true, "Subject is required."],
     default: [],
   },
-  educationBackground: { type: String, required: [true, "Education background is required."] },
-  teachingExperience: { type: String, required: [true, "Teaching experience is required."] },
+  educationBackground: {
+    type: String,
+    required: [true, "Education background is required."],
+  },
+  teachingExperience: {
+    type: String,
+    required: [true, "Teaching experience is required."],
+  },
   // myTutees: { type: Array, default: [{}] },
   // pendingTutees: { type: Array, default: [{}] },
 });

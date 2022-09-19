@@ -37,12 +37,16 @@ router.use(bodyParser.json());
 //   res.send(classes);
 // });
 
-router.get("/get-class", async (req, res) => {
+
+
+router.get("/get-classes", async (req, res) => {//need to insert middleware for classesvalidation
   try {
-    const classes = await Classes.find();
-    res.send(classes);
+    const userId = req.body._id//rn in the database the mongoid for tutors doesnt match the one in classes
+    console.log(userId)
+    const classes = await Classes.find({tutor: userId});
+    res.status(200).send(classes);
   } catch (error) {
-    res.status(500).send({ error });
+    res.status(500).send({ error: 'Unable to load classes.' });
   }
 });
 

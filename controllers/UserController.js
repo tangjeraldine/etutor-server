@@ -43,7 +43,7 @@ router.post("/signup", validation(SignUpValidation), async (req, res) => {
       User.create(newUser, (error, user) => {
         console.log(error);
         if (error) {
-          res.status(500).json({ error: "No user created." });
+          res.status(500).json({ error: "User unable to be created." });
         } else {
           res.status(200).json(user);
         }
@@ -56,38 +56,81 @@ router.post("/signup", validation(SignUpValidation), async (req, res) => {
   }
 });
 
+router.get("/viewuser/:id", async (req, res) => {
+  const { id } = req.params;
+  const ViewThisUser = await User.findOne({ _id: id });
+  res.send(ViewThisUser);
+});
+
+router.put(
+  "/edituserdetails/:id",
+  validation(SignUpValidation),
+  async (req, res) => {
+    const { id } = req.params;
+    const editedUserDetails = req.body;
+    console.log("editedUserDetails1", editedUserDetails);
+    try {
+      const updatedUser = await User.findOneAndUpdate(
+        id,
+        {
+          username: editedUserDetails.username,
+          password: bcrypt.hashSync(editedUserDetails.password, 10),
+          userType: editedUserDetails.userType,
+          email: editedUserDetails.email,
+          //! what if current user changes their email to another email that is already in use? Where to apply the conditional to eliminate this from happening
+        },
+        {
+          new: true,
+        }
+      );
+      console.log("editedUserDetails2", editedUserDetails);
+      console.log("updatedUser", updatedUser);
+      res.status(200).json(updatedUser);
+    } catch (error) {
+      console.log(error);
+      res.status(401).send({ error: "New user details could not be updated." });
+    }
+  }
+);
+
 // Seed for User //! --> use hashing function to hash passwords
-router.get("/seed", async (req, res) => {
+router.get("/seed", validation(SignUpValidation), async (req, res) => {
   const users = [
     {
       username: "Karen101",
       password: bcrypt.hashSync("iw@nttoseeY0U", 10),
-      userType: "tutor",
+      userType: "Tutor",
+      email: "karentanyy@gmail.com",
     },
     {
       username: "JohnCeeCee",
       password: bcrypt.hashSync("Youc@ntseeme1234", 10),
-      userType: "tutor",
+      userType: "Tutor",
+      email: "johncena@gmail.com",
     },
     {
       username: "paullee70",
       password: bcrypt.hashSync("iLov^JohnCen4", 10),
-      userType: "tutor",
+      userType: "Tutor",
+      email: "paullee@gmail.com",
     },
     {
       username: "sarahhh12",
       password: bcrypt.hashSync("mAtHs4lYfE!!", 10),
-      userType: "tutee",
+      userType: "Tutee",
+      email: "sarah12@gmail.com",
     },
     {
       username: "George3.14159",
       password: bcrypt.hashSync("Lifeofpi#3142", 10),
-      userType: "tutee",
+      userType: "Tutee",
+      email: "iamastudent@gmail.com",
     },
     {
       username: "James",
       password: bcrypt.hashSync("b@@ngb@@ng007", 10),
-      userType: "tutee",
+      userType: "Tutee",
+      email: "007@bond.com",
     },
   ];
   await User.deleteMany({});

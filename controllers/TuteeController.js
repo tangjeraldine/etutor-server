@@ -72,4 +72,26 @@ router.post("/signup", validation(TuteeProfileValidation), async (req, res) => {
   }
 });
 
+router.put(
+  "/editprofile/:id",
+  validation(TuteeProfileValidation),
+  async (req, res) => {
+    const { id } = req.params;
+    const editedProfile = req.body;
+    // console.log("editedProfile1", editedProfile);
+    // const showThisTutor = await Tutors.findOne({ username: id });
+    try {
+      const updatedTutee = await Tutees.findOneAndUpdate(id, editedProfile, {
+        new: true,
+      });
+      // console.log("editedProfile2", editedProfile);
+      // console.log("updatedTutee", updatedTutee);
+      res.status(200).json(updatedTutee);
+    } catch (error) {
+      console.log(error);
+      res.status(401).send({ error: "Tutee details could not be updated." });
+    }
+  }
+);
+
 module.exports = router;
