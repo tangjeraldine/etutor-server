@@ -30,3 +30,5 @@ const ClassesSchema = new mongoose.Schema({
 const Classes = mongoose.model("Classes", ClassesSchema);
 
 module.exports = Classes;
+
+//do we need class level? forgot if we discussed this alr....

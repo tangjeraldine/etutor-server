@@ -9,6 +9,10 @@ const SignUpValidation = yup.object({
       excludeEmptyString: true,
     })
     .required("Username is required."),
+    email: yup
+    .string()
+    .email("Must be a valid email")
+    .required("An email address is required."),
   password: yup
     .string()
     .matches(
