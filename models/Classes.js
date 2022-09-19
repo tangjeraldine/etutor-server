@@ -21,9 +21,39 @@ const ClassesSchema = new mongoose.Schema({
     ],
     required: true,
   },
+  classLevel: {
+    type: String,
+    enum: [
+      "Primary 1",
+      "Primary 2",
+      "Primary 3",
+      "Primary 4",
+      "Primary 5",
+      "Primary 6",
+      "Secondary 1",
+      "Secondary 2",
+      "Secondary 3",
+      "Secondary 4",
+      "Secondary 5",
+    ],
+    required: [true, "Class level is required."],
+  },
+  classType: {
+    type: String,
+    enum: ["In-Person", "Remote"],
+    required: [true, "Class type is required."],
+  },
   timeDay: { type: Date, required: true },
-  tutor: { type: mongoose.Schema.Types.ObjectId, ref: "Tutors" },
-  bookedBy: { type: [mongoose.Schema.Types.ObjectId], ref: "Tutees" },
+  tutor: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Tutors",
+    required: true,
+  },
+  bookedBy: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: "Tutees",
+    default: [],
+  },
   groupSize: { type: Number, required: true, min: 1 },
 });
 

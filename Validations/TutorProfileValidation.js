@@ -33,11 +33,9 @@ const TutorProfileValidation = yup.object({
     .min(1, "Rating cannot be lower than 1.")
     .max(5, "Rating cannot be higher than 5."),
   classType: yup
-    .string()
-    .matches(/(In-Person|Remote|Both In-Person and Remote)/, {
-      message: "An appropriate class type is required.",
-      excludeEmptyString: true,
-    })
+    .array()
+    .min(1, "At least one class type is required.")
+    .of(yup.string())
     .required("Please indicate the mode that the classes are held in."),
   classLevel: yup
     .array()
