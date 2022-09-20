@@ -5,7 +5,7 @@ const Classes = require("../models/Classes");
 const Tutors = require("../models/Tutors");
 const Tutees = require("../models/Tutees");
 const TutorProfileValidation = require("../Validations/TutorProfileValidation");
-const Users = require("../models/User");
+const Users = require("../models/Users");
 const router = express.Router();
 
 const SECRET = process.env.SECRET ?? "mysecret";

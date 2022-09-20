@@ -1,6 +1,6 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
-const User = require("../models/User");
+const Users = require("../models/Users");
 const Classes = require("../models/Classes");
 const Tutors = require("../models/Tutors");
 const Tutees = require("../models/Tutees");

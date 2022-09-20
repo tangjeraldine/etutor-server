@@ -43,7 +43,7 @@ const ClassesSchema = new mongoose.Schema({
     enum: ["In-Person", "Remote"],
     required: [true, "Class type is required."],
   },
-  timeDay: { type: Date, default: (() => new Date()) },//i remove required n change this to have default isntead bc doesnt work when its required w default
+  timeDay: { type: Date, default: () => new Date() }, //i remove required n change this to have default isntead bc doesnt work when its required w default
   tutor: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Tutors",
