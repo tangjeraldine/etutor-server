@@ -77,18 +77,31 @@ router.put(
     const editedUserDetails = req.body;
     console.log("editedUserDetails1", editedUserDetails);
     try {
-      const updatedUser = await Users.findOneAndUpdate(
-        id,
-        {
-          username: editedUserDetails.username,
+      const findUserEmail = await Users.findOne({
+        email: editedUserDetails.email,
+      });
+      const findUserUsername = await Users.findOne({
+        username: editedUserDetails.username,
+      });
+      if (findUserEmail === null && findUserUsername === null) {
+        const updatedUser = await Users.findOneAndUpdate(
+          id,
+          {
+            username: editedUserDetails.username,
+            password: bcrypt.hashSync(editedUserDetails.password, 10),
+            email: editedUserDetails.email,
+            //! what if current user changes their email to another email that is already in use? Where to apply the conditional to eliminate this from happening
+          },
+          {
+            new: true,
+          }
+        );
+      } else if (findUserEmail !== null) {
+        res.status(401).send({ error: "Email provided is already in use." });
+      } else if (findUserUsername !== null) {
+        res.status(401).send({ error: "Username provided is already in use." });
+      }
 
-          email: editedUserDetails.email,
-          //! what if current user changes their email to another email that is already in use? Where to apply the conditional to eliminate this from happening
-        },
-        {
-          new: true,
-        }
-      );
       console.log("editedUserDetails2", editedUserDetails);
       console.log("updatedUser", updatedUser);
       res.status(200).json(updatedUser);

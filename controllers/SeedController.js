@@ -2,12 +2,13 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const Classes = require("../models/Classes");
-const Tutors = require("../models/Tutors");
 const Tutees = require("../models/Tutees");
 const Users = require("../models/Users");
+const FAQAbout = require("../models/FAQAbout");
 const TutorProfileValidation = require("../Validations/TutorProfileValidation");
 const TuteeProfileValidation = require("../Validations/TuteeProfileValidation");
 const ClassesValidation = require("../Validations/ClassesValidation");
+const FAQAboutValidation = require("../Validations/FAQAboutValidation");
 const router = express.Router();
 
 const SECRET = process.env.SECRET ?? "mysecret";
@@ -62,10 +63,10 @@ router.get("/tutor/seed", async (req, res) => {
     },
   ];
 
-  await Tutors.deleteMany();
+  await FAQAbout.deleteMany();
 
   try {
-    const seedTutors = await Tutors.create(newTutors);
+    const seedTutors = await FAQAbout.create(newTutors);
     console.log(seedTutors);
     res.send(seedTutors);
   } catch (err) {
@@ -212,6 +213,60 @@ router.get("/users/seed", async (req, res) => {
   await Users.deleteMany({});
   const result = await Users.insertMany(users);
   res.json(result);
+});
+
+router.get("/faq-about/seed", async (req, res) => {
+  const newQuestions = [
+    {
+      question: "What if I encounter technical issues during sign up?",
+      answer:
+        "You can contact our administrative team on WhatsApp at +65 0000 1111, or email us at etutor-inc@email.com. Please allow us 3 working days to get back to you.",
+    },
+    {
+      question:
+        "As a new tutor, how do I get started with listing my services on eTutor?",
+      answer:
+        "During the sign up process, please indicate under the 'User Type' that you will be using this platform as a tutor.Thereafter, you will need to fill in the required information to build your profile before your listing can be viewed by prospective tutees. Should there be interested tutees who wish to connect with you, you will receive a notification from the tutee. The notification contains the tutee's contact details and preferred contact mode so that you may initiate contact with the tutee and make arrangements if you intend to accept the tutee as your student. Upon acceptance of the tutee on eTutor, you can create available timeslots which the tutee can then view and book accordingly.",
+    },
+
+    {
+      question: "Can tutors set up group tution bookings on eTutor?",
+      answer:
+        "Yes, tutors are able to set up booking sessions with either one-to-one or group tuition.",
+    },
+    {
+      question:
+        "I am a student looking for a tutor. How can I get started on eTutor?",
+      answer:
+        "After signing up for a tutee account and filling in the required information for your profile, you may use the search function to search for tutors (you can search by level, subject, region, mode of conducting the tuition session). You will need to notify a prospective tutor with the notification button to make contact with you and provide further details. Once the tutor has accepted you as their tutee, you will be able to view their available time slots and make bookings.",
+    },
+    {
+      question:
+        "Is there a physical space provided by ETutor for tutors and tutees to meet and conduct tuition sessions?",
+      answer:
+        " No, ETutor is only an e-platform for freelance tutors to list their tuition services and for tutees to select tutors of their interest. ETutor does not provide physical classrooms or areas for tuition to be conducted. Arrangements will need to be made privately between each tutor and prospective tutee on how their tuition sessions will be conducted.",
+    },
+  ];
+
+  await FAQAbout.deleteMany();
+
+  try {
+    const seedFAQ = await FAQAbout.create(newQuestions);
+    console.log(seedFAQ);
+    res.send(seedFAQ);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send(err);
+  }
+});
+
+router.get("/faq-about", async (req, res) => {
+  try {
+    const allquestions = await FAQAbout.find();
+    res.status(200).send(allquestions);
+  } catch (error) {
+    res.status(500).send(error);
+  }
 });
 
 module.exports = router;
