@@ -95,10 +95,11 @@ router.put(
   "/edit-class/:id/:tutorId",
   validation(ClassesValidation),
   async (req, res) => {
+    const { id, tutorId } = req.params;
+    const editedClass = req.body;
+    console.log(editedClass);
+    console.log(id, tutorId);
     try {
-      const { id, tutorId } = req.params;
-      const editedClass = req.body;
-      console.log(newClass);
       const updatedClass = await Classes.findOneAndUpdate(
         { _id: id, tutor: tutorId },
         editedClass,
@@ -112,6 +113,7 @@ router.put(
         res.status(200).send(updatedClass);
       }
     } catch (error) {
+      console.log(error);
       res.status(500).send({ error: "Unable to edit class." });
     }
 
