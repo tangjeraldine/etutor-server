@@ -103,6 +103,20 @@ router.get("/", userTypeIsTutee, async (req, res) => {
   }
 });
 
+// find all the tutees that have that specific tutor(find a specific tutor's list of tutees)
+router.get("/myTutees/:tutorId", async (req, res) => {
+  const { tutorId } = req.params;
+  console.log(tutorId);
+  try {
+    const myTutees = await Tutees.find({
+      myTutors: { $all: [tutorId] },
+    });
+    res.status(200).send(myTutees);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
+
 router.post(
   "/profile-signup",
   validation(TuteeProfileValidation),
