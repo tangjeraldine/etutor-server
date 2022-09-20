@@ -79,6 +79,23 @@ router.get("/", async (req, res) => {
   }
 });
 
+// Find one tutor by username (mongo ID)
+router.get("/:id", async (req, res) => {
+    const { id } = req.params;
+    try {
+      const tutor = await Tutors.findOne({username: id});
+      if (tutor === null) {
+        res.status(404).send({error: 'Tutor not found.'})
+      } else {
+        res.status(200).send(tutor);
+      }
+    } catch (error) {
+      res.status(500).send(error);
+      // res.status(401).send({ error: "Tutor details could not be updated." });
+    }
+  }
+);
+
 // Filter tutors by subjects,classType and classLevel
 router.get("/search", async (req, res) => {
   let subjects = req.query.subjects.split(",");
