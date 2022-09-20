@@ -37,6 +37,23 @@ const userTypeIsTutee = async (req, res, next) => {
   }
 };
 
+router.put("/deleteFavList", async (req, res) => {
+  const { username } = req.query;
+  const tutor = req.body;
+  console.log(tutor);
+
+  try {
+    const deleteTuteeFavList = await Tutees.findOneAndUpdate(
+      username,
+      { $pull: { favTutors: tutor } },
+      { new: true }
+    );
+    res.status(200).send(deleteTuteeFavList);
+  } catch (error) {
+    res.status(401).send({ error: error });
+  }
+});
+
 // find current tutee logged in and add their fav tutor
 
 router.put("/updateFavList", async (req, res) => {

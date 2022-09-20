@@ -128,12 +128,6 @@ router.get("/alltutor/search/", async (req, res) => {
   if (sortState === "Sort") {
     sortState = rating;
   }
-  console.log("subjects", subjects);
-  console.log("region", region);
-  console.log("classLevel", classLevel);
-  console.log("classType", classType);
-  console.log("sortState", sortState);
-  console.log(filter);
 
   try {
     const filteredTutor = await Tutors.find(filter, null, {
