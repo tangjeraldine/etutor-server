@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const Classes = require("../models/Classes");
 const Tutors = require("../models/Tutors");
 const Tutees = require("../models/Tutees");
+const Users = require("../models/Users");
 const TutorProfileValidation = require("../Validations/TutorProfileValidation");
 const TuteeProfileValidation = require("../Validations/TuteeProfileValidation");
 const ClassesValidation = require("../Validations/ClassesValidation");
@@ -15,7 +16,7 @@ const SECRET = process.env.SECRET ?? "mysecret";
 router.get("/tutor/seed", async (req, res) => {
   const newTutors = [
     {
-      username: "6326e8b4cd05db0ec29feb49",
+      username: "63293c37ba44d62447499a05",
       fullName: "Karen Tan Yan Yan",
       phone: 99911199,
       rates: 50,
@@ -30,7 +31,7 @@ router.get("/tutor/seed", async (req, res) => {
         "Was a primary school teacher at ABC Primary from 2007 to 2018. Became a private tutor after that. I conduct my classes with strictness and students must follow my rules to get good scores. I have a success rate of 80%. This means that 80% of my students get at least band A after attending my classes. ",
     },
     {
-      username: "6326e8b4cd05db0ec29feb4b",
+      username: "63293c37ba44d62447499a07",
       fullName: "Paul Lee",
       phone: 85459999,
       rates: 70,
@@ -45,7 +46,7 @@ router.get("/tutor/seed", async (req, res) => {
         "MOE teacher for 5 years. I like to adopt a more laid back approach to teaching, where I try to make students understand the fundamental principles behind why concepts are the way they are, rather than pure memorisation.",
     },
     {
-      username: "6326e8b4cd05db0ec29feb4a",
+      username: "63293c37ba44d62447499a06",
       fullName: "John Cena",
       phone: 123456789,
       rates: 100,
@@ -77,40 +78,40 @@ router.get("/tutor/seed", async (req, res) => {
 router.get("/tutee/seed", async (req, res) => {
   const newTutees = [
     {
-      username: "6326e8b4cd05db0ec29feb4d",
+      username: "63293c37ba44d62447499a09",
       fullName: "George Lim",
       phone: 91919191,
       preferredContactMode: "Phone Call",
       currentLevel: "Primary 3",
       region: "East",
       subjects: ["Science"],
-      myTutors: ["6326e8b4cd05db0ec29feb49"], //objectID
-      pendingTutors: ["6326e8b4cd05db0ec29feb4b"], //objectID
-      favTutors: ["6326e8b4cd05db0ec29feb4a"], //objectID
+      myTutors: ["63293de595dbfc0b3d8d8681"], //objectID
+      pendingTutors: ["63293de595dbfc0b3d8d8682", "63293de595dbfc0b3d8d8683"], //objectID
+      favTutors: ["63293de595dbfc0b3d8d8682"], //objectID
     },
     {
-      username: "6326e8b4cd05db0ec29feb4c",
+      username: "63293c37ba44d62447499a08",
       fullName: "Sarah Scofield",
       phone: 91119222,
       preferredContactMode: "Email",
       currentLevel: "Secondary 1",
       region: "North",
       subjects: ["Mathematics", "English"],
-      myTutors: ["6326e8b4cd05db0ec29feb4b"], //objectID
-      pendingTutors: ["6326e8b4cd05db0ec29feb4a"], //objectID
-      favTutors: ["6326e8b4cd05db0ec29feb4a"], //objectID
+      myTutors: ["63293de595dbfc0b3d8d8682"], //objectID
+      pendingTutors: ["63293de595dbfc0b3d8d8683"], //objectID
+      favTutors: ["63293de595dbfc0b3d8d8681", "63293de595dbfc0b3d8d8683"], //objectID
     },
     {
-      username: "6326e8b4cd05db0ec29feb4e",
+      username: "63293c37ba44d62447499a0a",
       fullName: "James Bond",
       phone: 90000007,
       preferredContactMode: "WhatsApp Message",
       currentLevel: "Primary 5",
       region: "West",
       subjects: ["English"],
-      myTutors: ["6326e8b4cd05db0ec29feb4a"], //objectID
-      pendingTutors: ["6326e8b4cd05db0ec29feb4b"], //objectID
-      favTutors: ["6326e8b4cd05db0ec29feb4b"], //objectID
+      myTutors: ["63293de595dbfc0b3d8d8683"], //objectID
+      pendingTutors: ["63293de595dbfc0b3d8d8682"], //objectID
+      favTutors: ["63293de595dbfc0b3d8d8682"], //objectID
     },
   ];
 
@@ -133,8 +134,8 @@ router.get("/classes/seed", async (req, res) => {
       classLevel: "Secondary 1",
       subject: "Mathematics",
       timeDay: "2022-10-17T15:30:00",
-      tutor: "6326e8b4cd05db0ec29feb4b",
-      bookedBy: ["6326e8b4cd05db0ec29feb4c"],
+      tutor: "63293de595dbfc0b3d8d8682",
+      bookedBy: ["63293e6941242487952fac4a"],
       groupSize: 5,
     },
     {
@@ -143,8 +144,8 @@ router.get("/classes/seed", async (req, res) => {
       classLevel: "Primary 5",
       subject: "English",
       timeDay: "2022-10-21T16:00:00",
-      tutor: "6326e8b4cd05db0ec29feb4a",
-      bookedBy: ["6326e8b4cd05db0ec29feb4e"],
+      tutor: "63293de595dbfc0b3d8d8683",
+      bookedBy: ["63293e6941242487952fac4b"],
       groupSize: 3,
     },
     {
@@ -153,8 +154,8 @@ router.get("/classes/seed", async (req, res) => {
       classLevel: "Primary 3",
       subject: "Science",
       timeDay: "2022-11-01T09:30:00",
-      tutor: "6326e8b4cd05db0ec29feb49",
-      bookedBy: ["6326e8b4cd05db0ec29feb4d"],
+      tutor: "63293de595dbfc0b3d8d8681",
+      bookedBy: ["63293e6941242487952fac49"],
       groupSize: 1,
     },
   ];
@@ -166,6 +167,51 @@ router.get("/classes/seed", async (req, res) => {
   } catch (err) {
     res.status(500).send(err);
   }
+});
+
+// Seed for User //! --> use hashing function to hash passwords
+router.get("/users/seed", async (req, res) => {
+  const users = [
+    {
+      username: "Karen101",
+      password: bcrypt.hashSync("iw@nttoseeY0U", 10),
+      userType: "Tutor",
+      email: "karentanyy@gmail.com",
+    },
+    {
+      username: "JohnCeeCee",
+      password: bcrypt.hashSync("Youc@ntseeme1234", 10),
+      userType: "Tutor",
+      email: "johncena@gmail.com",
+    },
+    {
+      username: "paullee70",
+      password: bcrypt.hashSync("iLov^JohnCen4", 10),
+      userType: "Tutor",
+      email: "paullee@gmail.com",
+    },
+    {
+      username: "sarahhh12",
+      password: bcrypt.hashSync("mAtHs4lYfE!!", 10),
+      userType: "Tutee",
+      email: "sarah12@gmail.com",
+    },
+    {
+      username: "George3.14159",
+      password: bcrypt.hashSync("Lifeofpi#3142", 10),
+      userType: "Tutee",
+      email: "iamastudent@gmail.com",
+    },
+    {
+      username: "James",
+      password: bcrypt.hashSync("b@@ngb@@ng007", 10),
+      userType: "Tutee",
+      email: "007@bond.com",
+    },
+  ];
+  await Users.deleteMany({});
+  const result = await Users.insertMany(users);
+  res.json(result);
 });
 
 module.exports = router;

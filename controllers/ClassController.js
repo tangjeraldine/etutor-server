@@ -1,7 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const jwt = require("jsonwebtoken");
-const User = require("../models/User");
+const User = require("../models/Users");
 const Tutor = require("../models/Tutors");
 const Tutee = require("../models/Tutees");
 const Classes = require("../models/Classes");
@@ -11,7 +11,7 @@ const router = express.Router();
 const moment = require("moment");
 const bodyParser = require("body-parser");
 const SECRET = process.env.SECRET ?? "mysecret";
-const ClassesValidation = require('../Validations/ClassesValidation')
+const ClassesValidation = require("../Validations/ClassesValidation");
 
 //* Middleware for validation
 const validation = (schema) => async (req, res, next) => {
@@ -47,25 +47,27 @@ router.use(bodyParser.json());
 
 router.get("/get-classes/:id", async (req, res) => {
   try {
-    const { id } = req.params
+    const { id } = req.params;
     console.log(id);
     const classes = await Classes.find({ tutor: id })
+      .populate("tutor")
+      .populate("bookedBy");
     // .populate('tutor');//need to figure this out. most probably mongo id nesting....
-    console.log(classes)
+    console.log(classes);
     res.status(200).send(classes);
   } catch (error) {
     res.status(500).send({ error: "Unable to load classes." });
   }
 });
 
-router.delete("/remove-class/:id", async (req, res) => {
+router.delete("/remove-class/:id/:tutorId", async (req, res) => {
   try {
-    const { id } = req.params
-    const deletedClass = await Classes.findOneAndRemove({ _id: id })
+    const { id, tutorId } = req.params;
+    const deletedClass = await Classes.findOneAndRemove({ _id: id });
     if (deletedClass === null) {
-      res.status(404).send({error: 'Class not found.'})
+      res.status(404).send({ error: "Class not found." });
     } else {
-      const remainingClasses = await Classes.find()
+      const remainingClasses = await Classes.find({ tutor: tutorId });
       res.status(200).send(remainingClasses);
     }
   } catch (error) {
@@ -73,18 +75,55 @@ router.delete("/remove-class/:id", async (req, res) => {
   }
 });
 
-router.post('/create-class', validation(ClassesValidation), async (req, res) => {
+router.post(
+  "/create-class",
+  validation(ClassesValidation),
+  async (req, res) => {
     const newClass = req.body;
-    console.log(newClass)
+    console.log(newClass);
     await Classes.create(newClass, (error, newClass) => {
       if (error) {
-        console.log(error);
-        res.status(500).json({ error: "Class unable to be created." });
+        res.status(500).json({ error: "Unable to create class." });
       } else {
         res.status(200).json(newClass);
       }
     });
   }
-)
+);
+
+router.put(
+  "/edit-class/:id/:tutorId",
+  validation(ClassesValidation),
+  async (req, res) => {
+    try {
+      const { id, tutorId } = req.params;
+      const editedClass = req.body;
+      console.log(newClass);
+      const updatedClass = await Classes.findOneAndUpdate(
+        { _id: id, tutor: tutorId },
+        editedClass,
+        {
+          new: true,
+        }
+      );
+      if (updatedClass === null) {
+        res.status(404).send({ error: "Class not found." });
+      } else {
+        res.status(200).send(updatedClass);
+      }
+    } catch (error) {
+      res.status(500).send({ error: "Unable to edit class." });
+    }
+
+    //   newClass, (error, newClass) => {
+    //   if (error) {
+    //     console.log(error);
+    //     res.status(500).json({ error: "Unable to create class." });
+    //   } else {
+    //     res.status(200).json(newClass);
+    //   }
+    // });
+  }
+);
 
 module.exports = router;
