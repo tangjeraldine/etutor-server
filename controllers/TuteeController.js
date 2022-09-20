@@ -143,9 +143,13 @@ router.put(
     // console.log("editedProfile1", editedProfile);
     // const showThisTutor = await Tutors.findOne({ username: id });
     try {
-      const updatedTutee = await Tutees.findOneAndUpdate(id, editedProfile, {
-        new: true,
-      });
+      const updatedTutee = await Tutees.findOneAndUpdate(
+        { username: id },
+        editedProfile,
+        {
+          new: true,
+        }
+      );
       // console.log("editedProfile2", editedProfile);
       // console.log("updatedTutee", updatedTutee);
       res.status(200).json(updatedTutee);

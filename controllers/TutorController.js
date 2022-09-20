@@ -204,7 +204,7 @@ router.put(
     // const showThisTutor = await Tutors.findOne({ username: id });
     try {
       const updatedTutor = await Tutors.findOneAndUpdate(
-        id, //finding the tutor that you want to edit
+        { username: id }, //finding the tutor that you want to edit
         editedProfile,
         { new: true }
       );
