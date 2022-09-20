@@ -37,6 +37,23 @@ const userTypeIsTutee = async (req, res, next) => {
   }
 };
 
+router.put("/deleteFavList", async (req, res) => {
+  const { username } = req.query;
+  const tutor = req.body;
+  console.log(tutor);
+
+  try {
+    const deleteTuteeFavList = await Tutees.findOneAndUpdate(
+      username,
+      { $pull: { favTutors: tutor } },
+      { new: true }
+    );
+    res.status(200).send(deleteTuteeFavList);
+  } catch (error) {
+    res.status(401).send({ error: error });
+  }
+});
+
 // find current tutee logged in and add their fav tutor
 
 router.put("/updateFavList", async (req, res) => {
@@ -100,6 +117,20 @@ router.get("/", userTypeIsTutee, async (req, res) => {
     //! Instead of sending all tutors info, we should be showing that one tutor's calendar information
   } catch (error) {
     res.status(500).send(error);
+  }
+});
+
+// find all the tutees that have that specific tutor(find a specific tutor's list of tutees)
+router.get("/myTutees/:tutorId", async (req, res) => {
+  const { tutorId } = req.params;
+  console.log(tutorId);
+  try {
+    const myTutees = await Tutees.find({
+      myTutors: { $all: [tutorId] },
+    });
+    res.status(200).send(myTutees);
+  } catch (err) {
+    res.status(500).send(err);
   }
 });
 
