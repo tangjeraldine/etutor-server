@@ -128,12 +128,6 @@ router.get("/alltutor/search/", async (req, res) => {
   if (sortState === "Sort") {
     sortState = rating;
   }
-  console.log("subjects", subjects);
-  console.log("region", region);
-  console.log("classLevel", classLevel);
-  console.log("classType", classType);
-  console.log("sortState", sortState);
-  console.log(filter);
 
   try {
     const filteredTutor = await Tutors.find(filter, null, {
@@ -204,7 +198,7 @@ router.put(
     // const showThisTutor = await Tutors.findOne({ username: id });
     try {
       const updatedTutor = await Tutors.findOneAndUpdate(
-        id, //finding the tutor that you want to edit
+        { username: id }, //finding the tutor that you want to edit
         editedProfile,
         { new: true }
       );

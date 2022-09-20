@@ -61,8 +61,12 @@ router.post("/signup", validation(SignUpValidation), async (req, res) => {
 
 router.get("/viewuser/:id", async (req, res) => {
   const { id } = req.params;
-  const ViewThisUser = await Users.findOne({ _id: id });
-  res.send(ViewThisUser);
+  try {
+    const ViewThisUser = await Users.findOne({ _id: id });
+    res.status(200).send(ViewThisUser);
+  } catch (error) {
+    res.status(400).send({ error: "User details cannot be retrieved." });
+  }
 });
 
 router.put(
@@ -77,8 +81,7 @@ router.put(
         id,
         {
           username: editedUserDetails.username,
-          password: bcrypt.hashSync(editedUserDetails.password, 10),
-          userType: editedUserDetails.userType,
+
           email: editedUserDetails.email,
           //! what if current user changes their email to another email that is already in use? Where to apply the conditional to eliminate this from happening
         },
