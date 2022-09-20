@@ -27,7 +27,7 @@ router.post("/signin", validation(SignInValidation), async (req, res) => {
     res.status(401).send({ error: "No user." });
   } else if (bcrypt.compareSync(password, user.password)) {
     const payload = { user };
-    const token = jwt.sign(payload, SECRET, { expiresIn: "30m" });
+    const token = jwt.sign(payload, SECRET);
     res.status(200).send({ msg: "Successful login", token });
   } else {
     res.status(401).send({ error: "Validation failed." });
