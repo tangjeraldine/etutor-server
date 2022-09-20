@@ -38,6 +38,26 @@ const userTypeIsTutor = async (req, res, next) => {
   }
 };
 
+router.get("/region", async (req, res) => {
+  try {
+    const sortbyRegion = await Tutors.find({}).sort({ region: 1, rating: 1 });
+    console.log(sortbyRegion);
+    res.status(200).send(sortbyRegion);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+router.get("/rating", async (req, res) => {
+  try {
+    const sortbyRating = await Tutors.find({}).sort({ rating: -1 });
+    console.log(sortbyRating);
+    res.status(200).send(sortbyRating);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 // Find all tutor w pagination
 router.get("/alltutor", async (req, res) => {
   try {
@@ -59,7 +79,24 @@ router.get("/alltutor", async (req, res) => {
   }
 });
 
-// Filter tutors by subjects,classType and classLevel, ratings and region
+// Find one tutor by username (mongo ID)
+router.get("/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const tutor = await Tutors.findOne({ username: id });
+    if (tutor === null) {
+      res.status(404).send({ error: "Tutor not found." });
+    } else {
+      res.status(200).send(tutor);
+    }
+  } catch (error) {
+    res.status(500).send(error);
+    // res.status(401).send({ error: "Tutor details could not be updated." });
+  }
+});
+
+// Filter tutors by subjects,classType and classLevel
+
 router.get("/alltutor/search/", async (req, res) => {
   const { sortState } = req.params;
   console.log(sortState);
@@ -142,6 +179,20 @@ router.post(
     });
   }
 );
+
+router.get("/editprofile/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const getThisTutor = await Tutors.findOne({ username: id });
+    if (getThisTutor === null) {
+      res.status(404).send({ error: "Tutor not found." });
+    } else {
+      res.status(200).send(getThisTutor);
+    }
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
 
 router.put(
   "/editprofile/:id",

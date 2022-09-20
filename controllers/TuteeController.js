@@ -37,6 +37,21 @@ const userTypeIsTutee = async (req, res, next) => {
   }
 };
 
+//* Edit profile get and put requests
+router.get("/editprofile/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const getThisTutee = await Tutees.findOne({ username: id });
+    if (getThisTutee === null) {
+      res.status(404).send({ error: "Tutee not found." });
+    } else {
+      res.status(200).send(getThisTutee);
+    }
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
+
 // Get to tutees page where user can access all their own information
 router.get("/", userTypeIsTutee, async (req, res) => {
   try {
@@ -66,8 +81,19 @@ router.post(
   }
 );
 
-router.put("/updateFavList/:id", async (req, res) => {
+//* Edit profile get and put requests
+router.get("/editprofile/:id", async (req, res) => {
   const { id } = req.params;
+  try {
+    const getThisTutee = await Tutees.findOne({ username: id });
+    if (getThisTutee === null) {
+      res.status(404).send({ error: "Tutee not found." });
+    } else {
+      res.status(200).send(getThisTutee);
+    }
+  } catch (err) {
+    res.status(500).send(err);
+  }
 });
 
 router.put(
