@@ -37,6 +37,44 @@ const userTypeIsTutee = async (req, res, next) => {
   }
 };
 
+// find current tutee logged in and add their fav tutor
+
+router.put("/updateFavList", async (req, res) => {
+  const { username } = req.query;
+  const tutor = req.body;
+  try {
+    const updateTuteeFavList = await Tutees.findOneAndUpdate(
+      username,
+      { $push: { favTutors: tutor } },
+      { new: true }
+    );
+    res.status(200).send(updateTuteeFavList);
+  } catch (error) {
+    res.status(401).send({ error });
+  }
+});
+
+// find current tutee logged in and display lists of their tutors
+router.get("/myTutors/", async (req, res) => {
+  const { username } = req.query;
+  try {
+    const currentTutee = await Tutees.findOne({
+      username: username,
+    })
+      .populate("favTutors")
+      .populate("myTutors")
+      .populate("pendingTutors");
+    if (currentTutee === null) {
+      res.status(404).send({ error: "Tutee not found" });
+    } else {
+      console.log(currentTutee);
+      res.status(200).send(currentTutee);
+    }
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
+
 //* Edit profile get and put requests
 router.get("/editprofile/:id", async (req, res) => {
   const { id } = req.params;
