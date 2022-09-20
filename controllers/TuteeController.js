@@ -66,6 +66,10 @@ router.post(
   }
 );
 
+router.put("/updateFavList/:id", async (req, res) => {
+  const { id } = req.params;
+});
+
 router.put(
   "/editprofile/:id",
   validation(TuteeProfileValidation),
