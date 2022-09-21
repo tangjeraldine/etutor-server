@@ -38,8 +38,8 @@ const ClassesValidation = yup.object({
     ),
   timeDay: yup
     .date()
-    .default(() => new Date()), //! How to make the date not before today
-    // .required("Date and time is required."),
+    // .default(() => new Date()), //! How to make the date not before today
+    .required("Date and time is required."),
   tutor: yup.string().required("A tutor is required."),
   bookedBy: yup.array().of(yup.string()).default([]),
   groupSize: yup

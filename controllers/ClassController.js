@@ -50,9 +50,7 @@ router.get("/get-classes/:id", async (req, res) => {
     const { id } = req.params;
     console.log(id);
     const classes = await Classes.find({ tutor: id })
-      .populate("tutor")
       .populate("bookedBy");
-    // .populate('tutor');//need to figure this out. most probably mongo id nesting....
     console.log(classes);
     res.status(200).send(classes);
   } catch (error) {
@@ -67,8 +65,10 @@ router.delete("/remove-class/:id/:tutorId", async (req, res) => {
     if (deletedClass === null) {
       res.status(404).send({ error: "Class not found." });
     } else {
-      const remainingClasses = await Classes.find({ tutor: tutorId });
-      res.status(200).send(remainingClasses);
+      // const remainingClasses = await Classes.find({ tutor: tutorId })
+      // .populate("bookedBy");
+      // res.status(200).send(remainingClasses);
+      res.status(200).send(deletedClass);
     }
   } catch (error) {
     res.status(500).send({ error: "Unable to delete class." });
@@ -110,7 +110,9 @@ router.put(
       if (updatedClass === null) {
         res.status(404).send({ error: "Class not found." });
       } else {
-        res.status(200).send(updatedClass);
+        // const updatedClasses = await Classes.find({ tutor: tutorId })
+      // res.status(200).send(updatedClasses);
+      res.status(200).send(updatedClass);
       }
     } catch (error) {
       console.log(error);
