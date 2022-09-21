@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const ClassesSchema = new mongoose.Schema({
   classTitle: {
     type: String,
-    required: true,
+    required: [true, "Class title is required."],
     minlength: [4, "Class title needs to be at least 4 char long."],
     maxlength: [30, "Max length of class title is 30 char."],
   },
@@ -19,7 +19,7 @@ const ClassesSchema = new mongoose.Schema({
       "Physics",
       "Chemistry",
     ],
-    required: true,
+    required: [true, "Subject is required."],
   },
   classLevel: {
     type: String,
@@ -43,11 +43,14 @@ const ClassesSchema = new mongoose.Schema({
     enum: ["In-Person", "Remote"],
     required: [true, "Class type is required."],
   },
-  timeDay: { type: Date, default: () => new Date() }, //i remove required n change this to have default isntead bc doesnt work when its required w default
+  timeDay: { type: Date,
+    required: [true, "Date and time is required."]
+    // default: () => new Date()
+  }, //i remove required n change this to have default isntead bc doesnt work when its required w default
   tutor: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Tutors",
-    required: true,
+    required: [true, "Tutor is required."],
   },
   bookedBy: {
     type: [mongoose.Schema.Types.ObjectId],
