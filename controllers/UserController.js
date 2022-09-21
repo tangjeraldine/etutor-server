@@ -75,39 +75,74 @@ router.put(
   async (req, res) => {
     const { id } = req.params;
     const editedUserDetails = req.body;
-    console.log("editedUserDetails1", editedUserDetails);
-    try {
-      const findUserEmail = await Users.findOne({
-        email: editedUserDetails.email,
-      });
-      const findUserUsername = await Users.findOne({
-        username: editedUserDetails.username,
-      });
-      if (findUserEmail === null && findUserUsername === null) {
-        const updatedUser = await Users.findOneAndUpdate(
-          id,
-          {
-            username: editedUserDetails.username,
-            password: bcrypt.hashSync(editedUserDetails.password, 10),
-            email: editedUserDetails.email,
-            //! what if current user changes their email to another email that is already in use? Where to apply the conditional to eliminate this from happening
-          },
-          {
-            new: true,
-          }
-        );
-      } else if (findUserEmail !== null) {
-        res.status(401).send({ error: "Email provided is already in use." });
-      } else if (findUserUsername !== null) {
-        res.status(401).send({ error: "Username provided is already in use." });
+    // console.log("editedUserDetails1", editedUserDetails);
+    if (editedUserDetails.password === "") {
+      try {
+        const findUserEmail = await Users.findOne({
+          email: editedUserDetails.email,
+        });
+        const findUserUsername = await Users.findOne({
+          username: editedUserDetails.username,
+        });
+        if (findUserEmail === null && findUserUsername === null) {
+          const updatedUser = await Users.findOneAndUpdate(
+            id,
+            {
+              username: editedUserDetails.username,
+              email: editedUserDetails.email,
+            },
+            {
+              new: true,
+            }
+          );
+          res.status(200).json(updatedUser);
+        } else if (findUserEmail !== null) {
+          res.status(401).send({ error: "Email provided is already in use." });
+        } else if (findUserUsername !== null) {
+          res
+            .status(401)
+            .send({ error: "Username provided is already in use." });
+        }
+      } catch (error) {
+        console.log(error);
+        res
+          .status(401)
+          .send({ error: "New user details could not be updated." });
       }
-
-      console.log("editedUserDetails2", editedUserDetails);
-      console.log("updatedUser", updatedUser);
-      res.status(200).json(updatedUser);
-    } catch (error) {
-      console.log(error);
-      res.status(401).send({ error: "New user details could not be updated." });
+    } else {
+      try {
+        const findUserEmail = await Users.findOne({
+          email: editedUserDetails.email,
+        });
+        const findUserUsername = await Users.findOne({
+          username: editedUserDetails.username,
+        });
+        if (findUserEmail === null && findUserUsername === null) {
+          const updatedUser = await Users.findOneAndUpdate(
+            id,
+            {
+              username: editedUserDetails.username,
+              password: bcrypt.hashSync(editedUserDetails.password, 10),
+              email: editedUserDetails.email,
+            },
+            {
+              new: true,
+            }
+          );
+          res.status(200).json(updatedUser);
+        } else if (findUserEmail !== null) {
+          res.status(401).send({ error: "Email provided is already in use." });
+        } else if (findUserUsername !== null) {
+          res
+            .status(401)
+            .send({ error: "Username provided is already in use." });
+        }
+      } catch (error) {
+        console.log(error);
+        res
+          .status(401)
+          .send({ error: "New user details could not be updated." });
+      }
     }
   }
 );
