@@ -41,7 +41,7 @@ router.post("/signup", validation(SignUpValidation), async (req, res) => {
   const thisUsername = await Users.findOne({ username: newUsername });
   const thisNewEmail = await Users.findOne({ email: newUser.email });
   if (thisUsername === null && thisNewEmail === null) {
-    User.create(newUser, (error, user) => {
+    Users.create(newUser, (error, user) => {
       console.log(error);
       if (error) {
         res.status(500).json({ error: "User unable to be created." });
