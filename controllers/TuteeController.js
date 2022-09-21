@@ -37,6 +37,14 @@ const userTypeIsTutee = async (req, res, next) => {
   }
 };
 
+router.put("/acceptPendingTutee", async (req, res) => {
+  try {
+    res.status(200).send("hello");
+  } catch (error) {
+    res.status(401).send({ error });
+  }
+});
+
 router.put("/deleteFavList", async (req, res) => {
   const { username } = req.query;
   const { tutorID } = req.body;
