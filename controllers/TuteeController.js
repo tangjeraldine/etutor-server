@@ -39,13 +39,13 @@ const userTypeIsTutee = async (req, res, next) => {
 
 router.put("/deleteFavList", async (req, res) => {
   const { username } = req.query;
-  const tutor = req.body;
-  console.log(tutor);
+  const { tutorID } = req.body;
+  console.log(tutorID);
 
   try {
     const deleteTuteeFavList = await Tutees.findOneAndUpdate(
       username,
-      { $pull: { favTutors: tutor } },
+      { $pull: { favTutors: tutorID } },
       { new: true }
     );
     res.status(200).send(deleteTuteeFavList);
@@ -126,7 +126,10 @@ router.get("/myTutees/:tutorId", async (req, res) => {
   console.log(tutorId);
   try {
     const myTutees = await Tutees.find({
-      myTutors: { $all: [tutorId] },
+      $or: [
+        { myTutors: { $all: [tutorId] } },
+        { pendingTutors: { $all: [tutorId] } },
+      ],
     });
     res.status(200).send(myTutees);
   } catch (err) {
