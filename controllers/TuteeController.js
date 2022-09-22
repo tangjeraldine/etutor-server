@@ -80,6 +80,7 @@ router.put("/updateFavList", async (req, res) => {
 });
 
 // find current tutee logged in and display lists of their tutors
+//i dont think this is being used? if not using can delete, check w dewei
 router.get("/myTutors/", async (req, res) => {
   const { username } = req.query;
   try {
@@ -91,6 +92,28 @@ router.get("/myTutors/", async (req, res) => {
       .populate("pendingTutors");
     if (currentTutee === null) {
       res.status(404).send({ error: "Tutee not found" });
+    } else {
+      console.log(currentTutee);
+      res.status(200).send(currentTutee);
+    }
+  } catch (err) {
+    res.status(500).send(err);
+  }
+});
+
+// fetch details of current tutee logged in
+router.get("/tuteedetails/:id", async (req, res) => {
+  const { id } = req.params;
+  console.log(id)
+  try {
+    const currentTutee = await Tutees.findOne({
+      username: id,
+    })
+      .populate("favTutors")
+      .populate("myTutors")
+      .populate("pendingTutors");
+    if (currentTutee === null) {
+      res.status(404).send({ error: "Tutee not found." });
     } else {
       console.log(currentTutee);
       res.status(200).send(currentTutee);

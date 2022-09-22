@@ -48,19 +48,46 @@ router.use(bodyParser.json());
 router.get("/get-classes/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    console.log(id);
-    const classes = await Classes.find({ tutor: id })
-      .populate("bookedBy");
-    console.log(classes);
+    const classes = await Classes.find({ tutor: id }).populate("bookedBy");
     res.status(200).send(classes);
   } catch (error) {
     res.status(500).send({ error: "Unable to load classes." });
   }
 });
 
-router.delete("/remove-class/:id/:tutorId", async (req, res) => {
+router.get("/get-classes/tutee/:id", async (req, res) => {
   try {
-    const { id, tutorId } = req.params;
+    const { id } = req.params;
+    console.log(id);
+    const classes = await Classes.find({ bookedBy: { $all: [id] } }).populate(
+      "bookedBy"
+    );
+    // console.log(classes);
+    res.status(200).send(classes);
+  } catch (error) {
+    res.status(500).send({ error: "Unable to load classes." });
+  }
+});
+
+router.get("/get-available-classes/:tuteeid/:id", async (req, res) => {
+  try {
+    const { tuteeid, id } = req.params;
+    const idArray = id.split(" ");
+    const classes = await Classes.find({ tutor: { $in: idArray }, bookedBy: { $nin: [tuteeid] } }).sort({
+      tutor: 1,
+      _id: 1,
+    });
+    // .populate("bookedBy");
+    // console.log(classes);
+    res.status(200).send(classes);
+  } catch (error) {
+    res.status(500).send({ error: "Unable to load classes." });
+  }
+});
+
+router.delete("/remove-class/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
     const deletedClass = await Classes.findOneAndRemove({ _id: id });
     if (deletedClass === null) {
       res.status(404).send({ error: "Class not found." });
@@ -111,23 +138,50 @@ router.put(
         res.status(404).send({ error: "Class not found." });
       } else {
         // const updatedClasses = await Classes.find({ tutor: tutorId })
-      // res.status(200).send(updatedClasses);
-      res.status(200).send(updatedClass);
+        // res.status(200).send(updatedClasses);
+        res.status(200).send(updatedClass);
       }
     } catch (error) {
       console.log(error);
       res.status(500).send({ error: "Unable to edit class." });
     }
-
-    //   newClass, (error, newClass) => {
-    //   if (error) {
-    //     console.log(error);
-    //     res.status(500).json({ error: "Unable to create class." });
-    //   } else {
-    //     res.status(200).json(newClass);
-    //   }
-    // });
   }
 );
+
+router.put("/remove-booking/:id/:tuteeid", async (req, res) => {
+  const { id, tuteeid } = req.params;
+  try {
+    const removedBooking = await Classes.findOneAndUpdate(
+      {_id: id},
+      { $pull: { bookedBy: tuteeid } },
+      { new: true }
+    );
+    if (removedBooking === null) {
+      res.status(404).send({error: 'Class not found.'});
+    } else {
+      res.status(200).send(removedBooking);
+    }
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+router.put("/add-booking/:id/:tuteeid", async (req, res) => {
+  const { id, tuteeid } = req.params;
+  try {
+    const addedBooking = await Classes.findOneAndUpdate(
+      {_id: id},
+      { $push: { bookedBy: tuteeid }},
+      { new: true }
+    );
+    if (addedBooking === null) {
+      res.status(404).send({error: 'Class not found.'});
+    } else {
+      res.status(200).send(addedBooking);
+    }
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
 
 module.exports = router;
