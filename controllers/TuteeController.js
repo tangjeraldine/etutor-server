@@ -37,6 +37,24 @@ const userTypeIsTutee = async (req, res, next) => {
   }
 };
 
+router.put("/addToPendingTutee/:username", async (req, res) => {
+  const tuteeID = req.params;
+  const tutor = req.body;
+  console.log("tuteeID", tuteeID);
+  console.log(tutor);
+  try {
+    const findTutee = await Tutees.findOneAndUpdate(
+      tuteeID,
+
+      { $push: { pendingTutors: tutor } },
+      { new: true }
+    );
+    res.status(200).send(findTutee);
+  } catch (error) {
+    res.status(500).send({ error: "Unable to accept/reject Tutee." });
+  }
+});
+
 router.put("/cancelPendingTutor", async (req, res) => {
   const tutorID = req.body;
   try {
@@ -84,7 +102,10 @@ router.put("/deleteFavList", async (req, res) => {
       username,
       { $pull: { favTutors: tutorID } },
       { new: true }
-    );
+    )
+      .populate("favTutors")
+      .populate("myTutors")
+      .populate("pendingTutors");
     res.status(200).send(deleteTuteeFavList);
   } catch (error) {
     res.status(401).send({ error: error });
@@ -101,7 +122,10 @@ router.put("/updateFavList", async (req, res) => {
       username,
       { $push: { favTutors: tutor } },
       { new: true }
-    );
+    )
+      .populate("favTutors")
+      .populate("myTutors")
+      .populate("pendingTutors");
     res.status(200).send(updateTuteeFavList);
   } catch (error) {
     res.status(401).send({ error });
@@ -133,7 +157,7 @@ router.get("/myTutors/", async (req, res) => {
 // fetch details of current tutee logged in
 router.get("/tuteedetails/:id", async (req, res) => {
   const { id } = req.params;
-  console.log(id)
+  console.log(id);
   try {
     const currentTutee = await Tutees.findOne({
       username: id,
