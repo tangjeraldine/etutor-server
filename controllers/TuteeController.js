@@ -116,7 +116,8 @@ router.put("/deleteFavList", async (req, res) => {
 
 router.put("/updateFavList", async (req, res) => {
   const { username } = req.query;
-  const tutor = req.body;
+  const tutor = req.body;//tutor data (object)
+  console.log(tutor)
   try {
     const updateTuteeFavList = await Tutees.findOneAndUpdate(
       username,
