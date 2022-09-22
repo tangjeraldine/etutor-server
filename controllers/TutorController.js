@@ -77,10 +77,10 @@ router.get("/:id", async (req, res) => {
 
 // Filter tutors by subjects,classType and classLevel
 
-router.get("/alltutor/search/", async (req, res) => {
-  const { sortState } = req.params;
+router.get("/alltutor/search/:sortState", async (req, res) => {
+  let { sortState } = req.params;
   console.log(sortState);
-  const { page = 0 } = req.query;
+  const { page } = req.query;
   const PAGE_SIZE = 5;
   const total = await Tutors.countDocuments({});
   let subjects = req.query.subjects.split(",");
@@ -88,10 +88,10 @@ router.get("/alltutor/search/", async (req, res) => {
   let classLevel = req.query.classLevel;
   let region = req.query.region.split(",");
   const filter = {
-    subjects: { $all: subjects },
+    subjects: { $in: subjects },
     region: { $all: region },
     classLevel: classLevel,
-    classType: { $all: classType },
+    classType: { $in: classType },
   };
   if (subjects[0] === "") {
     delete filter.subjects;
@@ -106,14 +106,14 @@ router.get("/alltutor/search/", async (req, res) => {
     delete filter.classLevel;
   }
   if (sortState === "Sort") {
-    sortState = rating;
+    sortState = 'rating';
   }
 
   try {
     const filteredTutor = await Tutors.find(filter, null, {
       skip: parseInt(page) * PAGE_SIZE,
       limit: PAGE_SIZE,
-      sort: { sortState: 1 },
+      sort: { [sortState]: -1 },
     }).exec();
 
     res
