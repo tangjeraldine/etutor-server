@@ -69,28 +69,42 @@ router.get("/get-classes/tutee/:id", async (req, res) => {
   }
 });
 
-router.get("/get-available-classes/:tuteeid/:tutorid/:tuteesubject/:tuteelevel", async (req, res) => {
-  try {
-    const { tuteeid, tutorid, tuteesubject, tuteelevel } = req.params;
-    const tutoridArray = tutorid.split(" ");
-    const tutorsubjectArray = tuteesubject.split(" ");
-    console.log(tuteeid, tutoridArray, tutorsubjectArray, tuteelevel)
-    const classes = await Classes.find({
-      tutor: { $in: tutoridArray },
-      bookedBy: { $nin: [tuteeid] },
-      subject: { $in: tutorsubjectArray },
-      classLevel: tuteelevel
-    }).sort({
-      timeDay: 1,
-      _id: 1,
-    }).populate("tutor")
-    .populate("bookedBy");
-    res.status(200).send(classes);
-  } catch (error) {
-    console.log(error)
-    res.status(500).send({ error: "Unable to load classes." });
+router.get(
+  "/get-available-classes/:tuteeid/:tuteesubject/:tuteelevel",
+  async (req, res) => {
+    try {
+      const tutorid = req.query.tutoridarray;
+      const { tuteeid, tuteesubject, tuteelevel } = req.params;
+      console.log("here", tutorid);
+      if (tutorid === undefined) {
+        res.status(200).send({ message: "Classes not found." });
+      } else {
+        const tutoridArray = tutorid.split(" ");
+        const tutorsubjectArray = tuteesubject.split(" ");
+        console.log(tuteeid, tutoridArray, tutorsubjectArray, tuteelevel);
+        const classes = await Classes.find({
+          tutor: { $in: tutoridArray },
+          bookedBy: { $nin: [tuteeid] },
+          subject: { $in: tutorsubjectArray },
+          classLevel: tuteelevel,
+        })
+          .sort({
+            timeDay: 1,
+            _id: 1,
+          })
+          .populate("tutor")
+          .populate("bookedBy");
+        if (classes.length === 0) {
+          res.status(200).send({ message: "Classes not found." });
+        } else {
+          res.status(200).send(classes);
+        }
+      }
+    } catch (error) {
+      res.status(500).send({ error: "Unable to load classes." });
+    }
   }
-});
+);
 
 router.delete("/remove-class/:id", async (req, res) => {
   try {
@@ -144,8 +158,6 @@ router.put(
       if (updatedClass === null) {
         res.status(404).send({ error: "Class not found." });
       } else {
-        // const updatedClasses = await Classes.find({ tutor: tutorId })
-        // res.status(200).send(updatedClasses);
         res.status(200).send(updatedClass);
       }
     } catch (error) {

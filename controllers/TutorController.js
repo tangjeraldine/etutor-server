@@ -38,27 +38,6 @@ const userTypeIsTutor = async (req, res, next) => {
   }
 };
 
-// Find all tutor w pagination!!!!!!probably redundant
-// router.get("/alltutor", async (req, res) => {
-//   try {
-//     // const { page = 0 } = req.query;
-//     const PAGE_SIZE = 2;
-//     const total = await Tutors.countDocuments({});
-//     const allTutor = await Tutors.find({}, null, {
-//       skip: parseInt(0) * PAGE_SIZE,
-//       limit: PAGE_SIZE,
-//       sort: {
-//         rating: -1,
-//       },
-//     });
-//     res
-//       .status(200)
-//       .send({ totalPages: Math.ceil(total / PAGE_SIZE), allTutor });
-//   } catch (error) {
-//     res.status(500).send(error);
-//   }
-// });
-
 // Find one tutor by username (mongo ID)
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
