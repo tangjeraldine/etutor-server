@@ -5,6 +5,7 @@ const Classes = require("../models/Classes");
 const Tutees = require("../models/Tutees");
 const Users = require("../models/Users");
 const FAQAbout = require("../models/FAQAbout");
+const Tutors = require('../models/Tutors')
 const TutorProfileValidation = require("../Validations/TutorProfileValidation");
 const TuteeProfileValidation = require("../Validations/TuteeProfileValidation");
 const ClassesValidation = require("../Validations/ClassesValidation");
@@ -17,7 +18,7 @@ const SECRET = process.env.SECRET ?? "mysecret";
 router.get("/tutor/seed", async (req, res) => {
   const newTutors = [
     {
-      username: "63293c37ba44d62447499a05",
+      username: "632cb571f84b8d308117808f",
       fullName: "Karen Tan Yan Yan",
       phone: 99911199,
       rates: 50,
@@ -32,7 +33,7 @@ router.get("/tutor/seed", async (req, res) => {
         "Was a primary school teacher at ABC Primary from 2007 to 2018. Became a private tutor after that. I conduct my classes with strictness and students must follow my rules to get good scores. I have a success rate of 80%. This means that 80% of my students get at least band A after attending my classes. ",
     },
     {
-      username: "63293c37ba44d62447499a07",
+      username: "632cb571f84b8d3081178091",
       fullName: "Paul Lee",
       phone: 85459999,
       rates: 70,
@@ -47,7 +48,7 @@ router.get("/tutor/seed", async (req, res) => {
         "MOE teacher for 5 years. I like to adopt a more laid back approach to teaching, where I try to make students understand the fundamental principles behind why concepts are the way they are, rather than pure memorisation.",
     },
     {
-      username: "63293c37ba44d62447499a06",
+      username: "632cb571f84b8d3081178090",
       fullName: "John Cena",
       phone: 123456789,
       rates: 100,
@@ -63,10 +64,10 @@ router.get("/tutor/seed", async (req, res) => {
     },
   ];
 
-  await FAQAbout.deleteMany();
+  await Tutors.deleteMany();
 
   try {
-    const seedTutors = await FAQAbout.create(newTutors);
+    const seedTutors = await Tutors.create(newTutors);
     console.log(seedTutors);
     res.send(seedTutors);
   } catch (err) {
@@ -79,40 +80,40 @@ router.get("/tutor/seed", async (req, res) => {
 router.get("/tutee/seed", async (req, res) => {
   const newTutees = [
     {
-      username: "63293c37ba44d62447499a09",
+      username: "632cb571f84b8d3081178093",
       fullName: "George Lim",
       phone: 91919191,
       preferredContactMode: "Phone Call",
       currentLevel: "Primary 3",
       region: "East",
       subjects: ["Science"],
-      myTutors: ["63293de595dbfc0b3d8d8681"], //objectID
-      pendingTutors: ["63293de595dbfc0b3d8d8682", "63293de595dbfc0b3d8d8683"], //objectID
-      favTutors: ["63293de595dbfc0b3d8d8682"], //objectID
+      myTutors: ["632cb7271ff067463d727945"], //objectID
+      pendingTutors: [], //objectID
+      favTutors: ["632cb7271ff067463d727945"], //objectID
     },
     {
-      username: "63293c37ba44d62447499a08",
+      username: "632cb571f84b8d3081178092",
       fullName: "Sarah Scofield",
       phone: 91119222,
       preferredContactMode: "Email",
       currentLevel: "Secondary 1",
       region: "North",
       subjects: ["Mathematics", "English"],
-      myTutors: ["63293de595dbfc0b3d8d8682"], //objectID
-      pendingTutors: ["63293de595dbfc0b3d8d8683"], //objectID
-      favTutors: ["63293de595dbfc0b3d8d8681", "63293de595dbfc0b3d8d8683"], //objectID
+      myTutors: ["632cb7271ff067463d727946"], //objectID
+      pendingTutors: [], //objectID
+      favTutors: ["632cb7271ff067463d727946", "632cb7271ff067463d727947"], //objectID
     },
     {
-      username: "63293c37ba44d62447499a0a",
+      username: "632cb571f84b8d3081178094",
       fullName: "James Bond",
       phone: 90000007,
       preferredContactMode: "WhatsApp Message",
       currentLevel: "Primary 5",
       region: "West",
       subjects: ["English"],
-      myTutors: ["63293de595dbfc0b3d8d8683"], //objectID
-      pendingTutors: ["63293de595dbfc0b3d8d8682"], //objectID
-      favTutors: ["63293de595dbfc0b3d8d8682"], //objectID
+      myTutors: ["632cb7271ff067463d727947"], //objectID
+      pendingTutors: [], //objectID
+      favTutors: ["632cb7271ff067463d727947", '632cb7271ff067463d727945'], //objectID
     },
   ];
 
@@ -135,8 +136,8 @@ router.get("/classes/seed", async (req, res) => {
       classLevel: "Secondary 1",
       subject: "Mathematics",
       timeDay: "2022-10-17T15:30:00",
-      tutor: "63293de595dbfc0b3d8d8682",
-      bookedBy: ["63293e6941242487952fac4a"],
+      tutor: "632cb7271ff067463d727946",
+      bookedBy: ["632cb7839a891cfafd4f0d2c"],
       groupSize: 5,
     },
     {
@@ -145,8 +146,8 @@ router.get("/classes/seed", async (req, res) => {
       classLevel: "Primary 5",
       subject: "English",
       timeDay: "2022-10-21T16:00:00",
-      tutor: "63293de595dbfc0b3d8d8683",
-      bookedBy: ["63293e6941242487952fac4b"],
+      tutor: "632cb7271ff067463d727947",
+      bookedBy: ["632cb7839a891cfafd4f0d2d"],
       groupSize: 3,
     },
     {
@@ -155,8 +156,8 @@ router.get("/classes/seed", async (req, res) => {
       classLevel: "Primary 3",
       subject: "Science",
       timeDay: "2022-11-01T09:30:00",
-      tutor: "63293de595dbfc0b3d8d8681",
-      bookedBy: ["63293e6941242487952fac49"],
+      tutor: "632cb7271ff067463d727945",
+      bookedBy: ["632cb7839a891cfafd4f0d2b"],
       groupSize: 1,
     },
   ];
