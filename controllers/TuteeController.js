@@ -37,11 +37,40 @@ const userTypeIsTutee = async (req, res, next) => {
   }
 };
 
-router.put("/acceptPendingTutee", async (req, res) => {
+router.put("/cancelPendingTutor", async (req, res) => {
+  const tutorID = req.body;
   try {
-    res.status(200).send("hello");
+    const findTutee = await Tutees.findOneAndUpdate(
+      { _id: tutorID },
+
+      { new: true }
+    );
+    if (findTutee === null) {
+      res.status(404).send({ error: "Tutee not found." });
+    } else {
+      res.status(200).send(findTutee);
+    }
   } catch (error) {
-    res.status(401).send({ error });
+    res.status(500).send({ error: "Unable to accept/reject Tutee." });
+  }
+});
+
+router.put("/updatePendingTutee", async (req, res) => {
+  const updatedTuteeDetails = req.body;
+
+  try {
+    const findTutee = await Tutees.findOneAndUpdate(
+      { _id: updatedTuteeDetails._id },
+      updatedTuteeDetails,
+      { new: true }
+    );
+    if (findTutee === null) {
+      res.status(404).send({ error: "Tutee not found." });
+    } else {
+      res.status(200).send(findTutee);
+    }
+  } catch (error) {
+    res.status(500).send({ error: "Unable to accept/reject Tutee." });
   }
 });
 
