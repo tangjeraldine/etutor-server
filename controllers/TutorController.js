@@ -38,26 +38,26 @@ const userTypeIsTutor = async (req, res, next) => {
   }
 };
 
-// Find all tutor w pagination
-router.get("/alltutor", async (req, res) => {
-  try {
-    const { page = 0 } = req.query;
-    const PAGE_SIZE = 5;
-    const total = await Tutors.countDocuments({});
-    const allTutor = await Tutors.find({}, null, {
-      skip: parseInt(page) * PAGE_SIZE,
-      limit: PAGE_SIZE,
-      sort: {
-        rating: -1,
-      },
-    });
-    res
-      .status(200)
-      .send({ totalPages: Math.ceil(total / PAGE_SIZE), allTutor });
-  } catch (error) {
-    res.status(500).send(error);
-  }
-});
+// Find all tutor w pagination!!!!!!probably redundant
+// router.get("/alltutor", async (req, res) => {
+//   try {
+//     // const { page = 0 } = req.query;
+//     const PAGE_SIZE = 2;
+//     const total = await Tutors.countDocuments({});
+//     const allTutor = await Tutors.find({}, null, {
+//       skip: parseInt(0) * PAGE_SIZE,
+//       limit: PAGE_SIZE,
+//       sort: {
+//         rating: -1,
+//       },
+//     });
+//     res
+//       .status(200)
+//       .send({ totalPages: Math.ceil(total / PAGE_SIZE), allTutor });
+//   } catch (error) {
+//     res.status(500).send(error);
+//   }
+// });
 
 // Find one tutor by username (mongo ID)
 router.get("/:id", async (req, res) => {
@@ -80,9 +80,9 @@ router.get("/:id", async (req, res) => {
 router.get("/alltutor/search/:sortState", async (req, res) => {
   let { sortState } = req.params;
   console.log(sortState);
-  const { page } = req.query;
-  const PAGE_SIZE = 5;
-  const total = await Tutors.countDocuments({});
+  const { page = 0 } = req.query;
+  const PAGE_SIZE = 2;
+
   let subjects = req.query.subjects.split(",");
   let classType = req.query.classType.split(",");
   let classLevel = req.query.classLevel;
@@ -115,6 +115,8 @@ router.get("/alltutor/search/:sortState", async (req, res) => {
       limit: PAGE_SIZE,
       sort: { [sortState]: -1 },
     }).exec();
+
+    const total = await Tutors.countDocuments(filter);
 
     res
       .status(200)
