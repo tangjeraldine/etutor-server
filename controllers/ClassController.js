@@ -59,9 +59,9 @@ router.get("/get-classes/tutee/:id", async (req, res) => {
   try {
     const { id } = req.params;
     console.log(id);
-    const classes = await Classes.find({ bookedBy: { $all: [id] } }).populate(
-      "bookedBy"
-    );
+    const classes = await Classes.find({ bookedBy: { $all: [id] } })
+      .populate("bookedBy")
+      .populate("tutor");
     // console.log(classes);
     res.status(200).send(classes);
   } catch (error) {
@@ -69,18 +69,25 @@ router.get("/get-classes/tutee/:id", async (req, res) => {
   }
 });
 
-router.get("/get-available-classes/:tuteeid/:id", async (req, res) => {
+router.get("/get-available-classes/:tuteeid/:tutorid/:tuteesubject/:tuteelevel", async (req, res) => {
   try {
-    const { tuteeid, id } = req.params;
-    const idArray = id.split(" ");
-    const classes = await Classes.find({ tutor: { $in: idArray }, bookedBy: { $nin: [tuteeid] } }).sort({
-      tutor: 1,
+    const { tuteeid, tutorid, tuteesubject, tuteelevel } = req.params;
+    const tutoridArray = tutorid.split(" ");
+    const tutorsubjectArray = tuteesubject.split(" ");
+    console.log(tuteeid, tutoridArray, tutorsubjectArray, tuteelevel)
+    const classes = await Classes.find({
+      tutor: { $in: tutoridArray },
+      bookedBy: { $nin: [tuteeid] },
+      subject: { $in: tutorsubjectArray },
+      classLevel: tuteelevel
+    }).sort({
+      timeDay: 1,
       _id: 1,
-    });
-    // .populate("bookedBy");
-    // console.log(classes);
+    }).populate("tutor")
+    .populate("bookedBy");
     res.status(200).send(classes);
   } catch (error) {
+    console.log(error)
     res.status(500).send({ error: "Unable to load classes." });
   }
 });
@@ -152,12 +159,12 @@ router.put("/remove-booking/:id/:tuteeid", async (req, res) => {
   const { id, tuteeid } = req.params;
   try {
     const removedBooking = await Classes.findOneAndUpdate(
-      {_id: id},
+      { _id: id },
       { $pull: { bookedBy: tuteeid } },
       { new: true }
     );
     if (removedBooking === null) {
-      res.status(404).send({error: 'Class not found.'});
+      res.status(404).send({ error: "Class not found." });
     } else {
       res.status(200).send(removedBooking);
     }
@@ -170,12 +177,12 @@ router.put("/add-booking/:id/:tuteeid", async (req, res) => {
   const { id, tuteeid } = req.params;
   try {
     const addedBooking = await Classes.findOneAndUpdate(
-      {_id: id},
-      { $push: { bookedBy: tuteeid }},
+      { _id: id },
+      { $push: { bookedBy: tuteeid } },
       { new: true }
     );
     if (addedBooking === null) {
-      res.status(404).send({error: 'Class not found.'});
+      res.status(404).send({ error: "Class not found." });
     } else {
       res.status(200).send(addedBooking);
     }
