@@ -82,6 +82,7 @@ router.put("/updatePendingTutee", async (req, res) => {
       updatedTuteeDetails,
       { new: true }
     );
+
     if (findTutee === null) {
       res.status(404).send({ error: "Tutee not found." });
     } else {
@@ -116,8 +117,8 @@ router.put("/deleteFavList", async (req, res) => {
 
 router.put("/updateFavList", async (req, res) => {
   const { username } = req.query;
-  const tutor = req.body;//tutor data (object)
-  console.log(tutor)
+  const tutor = req.body; //tutor data (object)
+  console.log(tutor);
   try {
     const updateTuteeFavList = await Tutees.findOneAndUpdate(
       username,
