@@ -37,102 +37,119 @@ const userTypeIsTutee = async (req, res, next) => {
   }
 };
 
-router.put("/addToPendingTutee/:username", async (req, res) => {
-  const tuteeID = req.params;
+router.put("/updatetutee/:action/:userid", async (req, res) => {
+  const { action, userid } = req.params;
   const tutor = req.body;
-  console.log("tuteeID", tuteeID);
-  console.log(tutor);
-  try {
-    const findTutee = await Tutees.findOneAndUpdate(
-      tuteeID,
-
-      { $push: { pendingTutors: tutor } },
-      { new: true }
-    );
-    res.status(200).send(findTutee);
-  } catch (error) {
-    res.status(500).send({ error: "Unable to accept/reject Tutee." });
+  console.log(tutor._id);
+  let update = {};
+  if (action === "addpending") {
+    update = { $push: { pendingTutors: tutor._id } };
+  } else if (action === "deletepending") {
+    update = { $pull: { pendingTutors: tutor._id } };
+  } else if (action === "fav") {
+    update = { $push: { favTutors: tutor._id } };
+  } else if (action == "unfav") {
+    update = { $pull: { favTutors: tutor._id } };
   }
-});
-
-router.put("/cancelPendingTutor", async (req, res) => {
-  const tutorID = req.body;
   try {
-    const findTutee = await Tutees.findOneAndUpdate(
-      { _id: tutorID },
-
+    const updatedTutee = await Tutees.findOneAndUpdate(
+      { username: userid },
+      update,
       { new: true }
     );
-    if (findTutee === null) {
+    if (updatedTutee === null) {
       res.status(404).send({ error: "Tutee not found." });
     } else {
-      res.status(200).send(findTutee);
+      res.status(200).send(updatedTutee);
     }
   } catch (error) {
-    res.status(500).send({ error: "Unable to accept/reject Tutee." });
+    res.status(500).send({ error: "Unable to update Tutee." });
   }
 });
 
-router.put("/updatePendingTutee", async (req, res) => {
-  const updatedTuteeDetails = req.body;
+// router.put("/cancelPendingTutor", async (req, res) => {
+//   const tutorID = req.body;
+//   try {
+//     const findTutee = await Tutees.findOneAndUpdate(
+//       { _id: tutorID },
 
-  try {
-    const findTutee = await Tutees.findOneAndUpdate(
-      { _id: updatedTuteeDetails._id },
-      updatedTuteeDetails,
-      { new: true }
-    );
+//       { new: true }
+//     );
+//     if (findTutee === null) {
+//       res.status(404).send({ error: "Tutee not found." });
+//     } else {
+//       res.status(200).send(findTutee);
+//     }
+//   } catch (error) {
+//     res.status(500).send({ error: "Unable to accept/reject Tutee." });
+//   }
+// });
 
-    if (findTutee === null) {
-      res.status(404).send({ error: "Tutee not found." });
-    } else {
-      res.status(200).send(findTutee);
-    }
-  } catch (error) {
-    res.status(500).send({ error: "Unable to accept/reject Tutee." });
-  }
-});
+// router.put("/updatePendingTutee", async (req, res) => {
+//   const updatedTuteeDetails = req.body;
 
-router.put("/deleteFavList", async (req, res) => {
-  const { username } = req.query;
-  const { tutorID } = req.body;
-  console.log(tutorID);
+//   try {
+//     const findTutee = await Tutees.findOneAndUpdate(
+//       { _id: updatedTuteeDetails._id },
+//       updatedTuteeDetails,
+//       { new: true }
+//     );
+//     if (findTutee === null) {
+//       res.status(404).send({ error: "Tutee not found." });
+//     } else {
+//       res.status(200).send(findTutee);
+//     }
+//   } catch (error) {
+//     res.status(500).send({ error: "Unable to accept/reject Tutee." });
+//   }
+// });
 
-  try {
-    const deleteTuteeFavList = await Tutees.findOneAndUpdate(
-      username,
-      { $pull: { favTutors: tutorID } },
-      { new: true }
-    )
-      .populate("favTutors")
-      .populate("myTutors")
-      .populate("pendingTutors");
-    res.status(200).send(deleteTuteeFavList);
-  } catch (error) {
-    res.status(401).send({ error: error });
-  }
-});
+// router.put("/deleteFavList", async (req, res) => {
+//   const { username } = req.query;
+//   const tutor = req.body;
+//   console.log(username, tutor._id);
+
+//   try {
+//     const deleteTuteeFavList = await Tutees.findOneAndUpdate(
+//       { username: username },
+//       { $pull: { favTutors: tutor._id } },
+//       { new: true }
+//     )
+//       .populate("favTutors")
+//       .populate("myTutors")
+//       .populate("pendingTutors");
+//     if (deleteTuteeFavList === null) {
+//       res.status(404).send({ error: "Tutee not found." });
+//     } else {
+//       res.status(200).send(deleteTuteeFavList);
+//     }
+//   } catch (error) {
+//     res.status(500).send({ error: "Unable to fav tutor." });
+//   }
+// });
 
 // find current tutee logged in and add their fav tutor
 
-router.put("/updateFavList", async (req, res) => {
-  const { username } = req.query;
-  const tutor = req.body; //tutor data (object)
-  console.log(tutor);
-  try {
-    const updateTuteeFavList = await Tutees.findOneAndUpdate(
-      username,
-      { $push: { favTutors: tutor } },
-      { new: true }
-    )
-      .populate("favTutors")
-      .populate("myTutors")
-      .populate("pendingTutors");
-    res.status(200).send(updateTuteeFavList);
-  } catch (error) {
-    res.status(401).send({ error });
-  }
-});
+// router.put("/updateFavList", async (req, res) => {
+//   const { username } = req.query;
+//   const tutor = req.body;
+//   try {
+//     const updateTuteeFavList = await Tutees.findOneAndUpdate(
+//       { username: username },
+//       { $push: { favTutors: tutor._id } },
+//       { new: true }
+//     )
+//       .populate("favTutors")
+//       .populate("myTutors")
+//       .populate("pendingTutors");
+//     if (updateTuteeFavList === null) {
+//       res.status(404).send({ error: "Tutee not found." });
+//     }
+//     res.status(200).send(updateTuteeFavList);
+//   } catch (error) {
+//     res.status(500).send({ error: "Unable to fav tutor." });
+//   }
+// });
 
 // find current tutee logged in and display lists of their tutors
 //i dont think this is being used? if not using can delete, check w dewei
