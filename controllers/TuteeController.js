@@ -190,8 +190,10 @@ router.post(
 //* Edit profile get and put requests
 router.get("/editprofile/:id", async (req, res) => {
   const { id } = req.params;
+  console.log(id)
   try {
     const getThisTutee = await Tutees.findOne({ username: id });
+    console.log(getThisTutee)
     if (getThisTutee === null) {
       res.status(404).send({ error: "Tutee not found." });
     } else {

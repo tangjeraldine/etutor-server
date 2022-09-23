@@ -45,16 +45,20 @@ router.post("/signup", validation(SignUpValidation), async (req, res) => {
       console.log(error);
       if (error) {
         res.status(500).json({ error: "User unable to be created." });
+        return
       } else {
         res.status(200).json(user);
+        return
       }
     });
   } else {
     if (thisUsername.username === newUsername) {
       res.status(400).send({ error: "This username has been taken." });
+      return
     }
     if (thisNewEmail.email === newUser.email) {
       res.status(400).send({ error: "This email address is already in use." });
+      return
     }
   }
 });

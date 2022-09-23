@@ -1,6 +1,9 @@
 const yup = require("yup");
 
 const TuteeProfileValidation = yup.object({
+  username: yup
+  .string()
+  .required("Username is required."),
   fullName: yup
     .string()
     .matches(/^[a-zA-Z\s]{4,30}$/, {
